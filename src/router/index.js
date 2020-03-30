@@ -4,6 +4,8 @@ import Home from '../views/Home.vue'
 import Index from '../components/Index.vue'
 import Music from '../components/Music.vue'
 import MV from '../components/MV.vue'
+import SongSheet from '../components/SongSheet.vue'
+import SingerDetails from '../components/SingerDetails.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,6 +26,18 @@ const routes = [
     name: 'MV',
     component: MV,
     meta: {title:"音乐MV"}
+  },
+  {
+    path: '/songsheet',
+    name: 'SongSheet',
+    component: SongSheet,
+    meta: {title:"歌单"}
+  },
+  {
+    path: '/singerdetails',
+    name: 'SingerDetails',
+    component: SingerDetails,
+    meta: {title:"歌手详情"}
   },
   {
     path: '/about',

@@ -62,7 +62,7 @@
   export default {
     data() {
       return {
-
+        fullscreenLoading: false
       }
     },
     methods: {
@@ -73,6 +73,7 @@
         })
       },
       getMusicMV(id) {
+        this.playMusic(0);
         this.axios.get('/mv/url?id='+id).then(res => {
           this.getMV(res.data.url)
         });

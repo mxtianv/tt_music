@@ -1,5 +1,14 @@
 <template>
   <div id="app">
+    <div class="rightfixed fh0">
+    	<ul>
+         <li><i class="el-icon-postcard"></i></li>
+         <li><i class="el-icon-headset"></i></li>
+         <li><i class="el-icon-mobile"></i></li>
+         <li><i class="el-icon-monitor"></i></li>
+         <li class="fh"><i class="el-icon-arrow-up"></i></li>
+    	</ul>
+    </div>
     <div class="header">
       <div class="center">
         <a href="#/"><img src="./assets/kuwo.png"></a>
@@ -14,7 +23,7 @@
       		<li>更多</li>
       	</ul>
       	<div class="right">
-      		<input v-loading.fullscreen.lock="fullscreenLoading" @keyup.enter="musicList" v-model="keyword" type="text" class="search" placeholder="请输入你想听的音乐">
+      		<input @keyup.enter="musicList" v-model="keyword" type="text" class="search" placeholder="请输入你想听的音乐">
       		<span>登录 / 注册</span>
       	</div>
       </div>
@@ -38,7 +47,7 @@
     			<p>下载客户端</p>
     			<br>
     				<span>
-    					<a href="#">PC端</a>
+    					<a href="#">Windows端</a>
     					<a href="#">Mac端</a>
     				</span>
     				<span>
@@ -100,23 +109,41 @@
         this.fullscreenLoading = true;
         this.axios.get('/search?keywords='+this.keyword).then(res => {
           this.getMusicList(res.result);
-          this.fullscreenLoading = false;
         })
+
         location.href = '#/music'
+      },
+      fanhui() {
+      	if(this.$(document).scrollTop() >= 500)
+      	this.$(".fh0").fadeIn();
+      	else this.$(".fh0").fadeOut();
       }
     },
     computed: {
       ...mapState(['music', 'currentRouting'])
     },
     mounted() {
-      this.changeRouting('index')
+      let that = this;
+      this.changeRouting('index');
+      this.$(".fh0").hide();
+      this.fanhui();
+      this.$(window).scroll(function(){
+      		that.fanhui();
+      });
+      this.$(".fh").click(function(){
+      	that.$("body, html").stop().animate({
+      		scrollTop: 0
+      	});
+      });
     }
   }
+
 </script>
 <style>
   *{
   	margin: 0;
   	padding: 0;
+    box-sizing: border-box;
   }
   a {
     color: black;
@@ -124,6 +151,35 @@
   }
   a:hover{
   	text-decoration: none;
+  }
+  .rightfixed {
+  	width: 52px;
+  	height: 300px;
+  	position: fixed;
+  	right: 2%;
+  	top: 300px;
+  	z-index: 2;
+  }
+  .rightfixed ul li {
+  	float: left;
+  	width: 52px;
+  	height: 52px;
+  	margin-bottom: 8px;
+  	background: #f5f5f5;;
+  	list-style: none;
+    font-size: 30px;
+    color: #666;
+    transition: .3s;
+  }
+  .rightfixed ul li i {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .rightfixed ul li:hover {
+    cursor: pointer;
+    color: #7B68EE;
   }
   .header {
   	width: 100%;
@@ -164,12 +220,13 @@
     line-height: 80px;
   }
   .header .right input {
-  	height: 20px;
+  	height: 35px;
   	width: 280px;
   	padding: 6px;
   	background: #f5f5f5;
   	border: none;
   	outline: none;
+    padding-left: 15px;
   }
   .header .right span {
   	margin-left: 10px;

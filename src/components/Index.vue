@@ -14,7 +14,7 @@
       </el-carousel-item>
     </el-carousel>
     <div class="recommend">
-    	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 0px;">推荐歌单</h3>
+    	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 10px;">推荐歌单</h3>
     	<div id="new2" class="nav">
     		<a class="new" href="javascript:;">每日推荐</a>
     		<a href="javascript:;">翻唱</a>
@@ -26,14 +26,14 @@
     	<br><br>
     	<div class="Item">
     		<div class="item" v-for="(i, index) in img" :key="index">
-    			<img :src="i.coverImgUrl" >
+    			<img @click="getrecommendSongs(i.id)" :src="i.coverImgUrl" >
     			<p>{{i.nickname}}</p>
     		</div>
     	</div>
     </div>
     <!-- 精彩活动 -->
     <div class="activity">
-    	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 10px;">精彩活动</h3>
+    	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 25px;">精彩活动</h3>
     	<div id="img">
     		<div class="img1">
     			<img src="../assets/activity1.jpg" >
@@ -45,7 +45,7 @@
     </div>
     <!-- 排行榜-->
     <div class="recommend ranking">
-    	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 10px;">排行榜</h3>
+    	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 25px;">排行榜</h3>
     	<div class="nav">
     		<a href="javascript:;">更多</a>
     	</div>
@@ -74,7 +74,7 @@
     <!-- 歌手推荐 -->
     <div class="singerRrecommendation">
     	<div class="recommend">
-    		<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 0px;">歌手推荐</h3>
+    		<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 15px;">歌手推荐</h3>
     		<div id="new2" class="nav">
     			<a class="new" href="javascript:;">华语</a>
     			<a href="javascript:;">欧美</a>
@@ -86,7 +86,7 @@
     	</div>
     	<div class="peopleImg">
     		<div class="content" v-for="(i, index) in singerImg" :key="index">
-    			<img :src="i.img1v1Url" >
+    			<img v-loading.fullscreen.lock="fullscreenLoading" @click="getAsyncSingerDetail(i.id)" :src="i.img1v1Url" >
     			<p>{{i.name}}</p>
     			<p>{{i.musicSize}}首歌曲</p>
     		</div>
@@ -95,7 +95,7 @@
     <!-- 主播电台 -->
     <div class="anchorStation">
     	<div class="recommend">
-    		<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 0px;">主播电台</h3>
+    		<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 10px;">主播电台</h3>
     		<a class="more">
     			<span>畅听更多精品电台</span>
     		</a>
@@ -131,17 +131,29 @@
           {'img': require('../assets/p5.png')}
         ],
         singerImg:[],
-        radioStation:[]
+        radioStation:[],
+        fullscreenLoading:false
       }
     },
     methods: {
-      ...mapMutations(['playMusic', 'getMusicBang']),
+      ...mapMutations(['playMusic', 'getMusicBang', 'getRecommendSongs', 'getsingerDetails']),
       // 获取歌单封面
       getSongSheetImg() {
         let that = this;
         this.axios.get("/top/playlist?limit=5&order=new").then(res => {
           that.img = res.playlists;
         })
+      },
+      // 获取歌单详细
+      getrecommendSongs(id) {
+        this.fullscreenLoading = true;
+        this.axios.get("/playlist/detail?id="+id).then(res => {
+          this.getRecommendSongs(res.playlist)
+        })
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+          location.href = '#/songsheet'
+        }, 1500) 
       },
       // 获取 Banner
       getBanner() {
@@ -162,7 +174,7 @@
                 music3.playlist,
                 music4.playlist,
                 music5.playlist
-        ]
+        ];
       },
       // 歌手推荐
       getSingerImg() {
@@ -183,6 +195,24 @@
         this.axios.get('/song/url?id='+id).then(res => {
           this.playMusic(res.data[0].url);
         })
+      },
+      // 歌手详细
+      async getSingerDetail(id) {
+        let music = await this.axios.get('/artists?id='+id);
+        let mv = await this.axios.get('/artists?id='+id);
+        let album = await this.axios.get('/artists?id='+id);
+        let introduction = await this.axios.get('/artists?id='+id);
+        return [music, mv, album, introduction];
+      },
+      getAsyncSingerDetail(id) {
+        this.fullscreenLoading = true;
+        this.getSingerDetail(id).then(res => {
+          this.getsingerDetails(res);
+        });
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+          location.href = '#/singerdetails';
+        }, 1500)
       }
     },
     computed: {
@@ -293,6 +323,9 @@
   	display: -webkit-flex; /* Safari */
   	display: flex;
   	justify-content: space-between;
+  }
+  .Item img:hover {
+    cursor: pointer;
   }
   .Bang {
   	display: -webkit-flex; /* Safari */

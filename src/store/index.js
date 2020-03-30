@@ -11,7 +11,9 @@ export default new Vuex.Store({
     currentRouting: 0,
     MV: 0,
     MVinfo: 0,
-    MVcomment: 0
+    MVcomment: 0,
+    recommendSongs: 0,
+    singerDetails: 0
   },
   mutations: {
     playMusic(state, url) {
@@ -34,6 +36,12 @@ export default new Vuex.Store({
     },
     getMVcomment(state, comment) {
       state.MVcomment = comment;
+    },
+    getRecommendSongs(state, songlist) {
+      state.recommendSongs = songlist;
+    },
+    getsingerDetails(state, list) {
+      state.singerDetails = list;
     }
   },
   actions: {
