@@ -1,5 +1,14 @@
 <template>
-  <div class="song-sheet center">
+  <div v-if="code == 404" class="err">
+    <img src="../assets/err.png" alt="">
+    <p>抱歉，暂无相关数据，重新刷新页面试试吧</p>
+    <router-link to="/">
+      <div class="fhindex">
+        <span>返回首页</span>
+      </div>
+    </router-link>
+  </div>
+  <div v-else class="song-sheet center">
     <div class="left">
       <img :src="recommendSongs.coverImgUrl" alt="">
       <strong>歌单介绍</strong>
@@ -61,17 +70,19 @@
 </template>
 
 <script>
-  import {mapState, mapMutations} from 'vuex'
+  import {mapMutations} from 'vuex'
   export default {
     data() {
       return {
         pagesize: 30,
         currentPage: 1,
-        total: 0
+        total: 0,
+        recommendSongs: '',
+        code: 200
       }
     },
     methods: {
-      ...mapMutations(['playMusic', 'getMV', 'getMVinfo', 'getMVcomment']),
+      ...mapMutations(['playMusic']),
       getMusicUrl(id) {
         this.axios.get('/song/url?id='+id).then(res => {
           this.playMusic(res.data[0].url)
@@ -79,32 +90,25 @@
       },
       getMusicMV(id) {
         this.playMusic(0);
-        this.axios.get('/mv/url?id='+id).then(res => {
-          this.getMV(res.data.url)
-        });
-        this.axios.get('/mv/detail?mvid='+id).then(res => {
-          this.getMVinfo(res.data)
-        });
-        this.axios.get('/comment/mv?id='+id).then(res => {
-          if (res.hotComments.length <= 50) {
-            this.getMVcomment(res.hotComments)
-          }
-          //console.log(res.hotComments)
-        })
-        location.href = '#/mv'
+        location.href = '#/mv/'+id;
       },
       handleSizeChange(val) {
         //console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         this.currentPage = val;
+        window.scrollTo(0, 0);
       }
     },
     computed: {
-      ...mapState(['recommendSongs'])
+
     },
     mounted() {
-      this.total = this.recommendSongs.tracks.length;
+      this.axios.get("/playlist/detail?id="+this.$route.params.id).then(res => {
+        this.recommendSongs = res.playlist;
+        this.code = res.code;
+        this.total = res.playlist.tracks.length;
+      })
       //console.log(this.recommendSongs.tracks.length)
     }
   }

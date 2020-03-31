@@ -6,6 +6,9 @@ import Music from '../components/Music.vue'
 import MV from '../components/MV.vue'
 import SongSheet from '../components/SongSheet.vue'
 import SingerDetails from '../components/SingerDetails.vue'
+import HotMV from '../components/HotMV.vue'
+import RankList from '../components/RankList.vue'
+import Singers from '../components/Singers.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -22,19 +25,41 @@ const routes = [
     meta: {title:"音乐列表"}
   },
   {
+    path: '/rankList',
+    name: 'RankList',
+    component: RankList,
+    meta: {title:"音乐排行榜"}
+  },
+  {
     path: '/mv',
+    name: 'HotMV',
+    component: HotMV,
+    meta: {title:"MV大全"}
+  },
+  {
+    path: '/mv/:id',
     name: 'MV',
     component: MV,
     meta: {title:"音乐MV"}
   },
   {
-    path: '/songsheet',
+    path: '/songsheet/:id',
     name: 'SongSheet',
     component: SongSheet,
     meta: {title:"歌单"}
   },
   {
+    path: '/singers',
+    name: 'Singers',
+    component: Singers,
+    meta: {title:"歌手排行"}
+  },
+  {
     path: '/singerdetails',
+    redirect: 'singers'
+  },
+  {
+    path: '/singerdetails/:id',
     name: 'SingerDetails',
     component: SingerDetails,
     meta: {title:"歌手详情"}

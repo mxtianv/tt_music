@@ -3,7 +3,7 @@
     <div id="new3" class="nav">
     	<router-link to="/music">单曲</router-link>
     	<a href="javascript:;">专辑</a>
-    	<a class="new"  href="javascript:;">MV</a>
+      <router-link to="/mv" class="new">MV</router-link>
     	<a href="javascript:;">歌单</a>
     	<a href="javascript:;">歌手</a>
     </div>
@@ -40,11 +40,32 @@
   export default {
     data() {
       return {
-
+        MV: '',
+        MVinfo: '',
+        MVcomment: ''
       }
     },
+    methods: {
+      getMV(id) {
+        this.axios.get('/mv/url?id='+id).then(res => {
+          this.MV = res.data.url;
+        });
+        this.axios.get('/mv/detail?mvid='+id).then(res => {
+          this.MVinfo = res.data;
+        });
+        this.axios.get('/comment/mv?id='+id).then(res => {
+          if (res.hotComments.length <= 50) {
+            this.MVcomment = res.hotComments;
+          }
+          //console.log(res.hotComments)
+        })
+      }
+    },
+    mounted() {
+      this.getMV(this.$route.params.id);
+    },
     computed: {
-      ...mapState(['MV', 'MVinfo', 'MVcomment'])
+
     }
   }
 </script>

@@ -1,11 +1,30 @@
 <template>
-  <div class="singer-details">
+  <div v-if="code == 404" class="err">
+    <img src="../assets/err.png" alt="">
+    <p>抱歉，暂无相关数据，重新刷新页面试试吧</p>
+    <router-link to="/">
+      <div class="fhindex">
+        <span>返回首页</span>
+      </div>
+    </router-link>
+  </div>
+  <div v-else class="singer-details">
     <ul id="new1">
-    	<li>推荐</li>
-    	<li>排行榜</li>
-    	<li class="new">歌手</li>
-    	<li>歌单</li>
-    	<li>MV</li>
+    	<router-link to="/">
+        <li>推荐</li>
+      </router-link>
+    	<router-link to="rankList">
+        <li>排行榜</li>
+      </router-link>
+    	<router-link to="singers">
+        <li class="new">歌手</li>
+      </router-link>
+    	<router-link to="/songsheet">
+        <li>歌单</li>
+      </router-link>
+    	<router-link to="/mv">
+        <li>MV</li>
+      </router-link>
     </ul>
     <br>
     <div class="singer">
@@ -95,7 +114,9 @@
         pagesize: 30,
         currentPage: 1,
         total: 0,
-        hotSongs: ''
+        hotSongs: '',
+        singerDetails: '',
+        code: 200
       }
     },
     methods: {
@@ -107,38 +128,40 @@
       },
       getMusicMV(id) {
         this.playMusic(0);
-        this.axios.get('/mv/url?id='+id).then(res => {
-          this.getMV(res.data.url)
-        });
-        this.axios.get('/mv/detail?mvid='+id).then(res => {
-          this.getMVinfo(res.data)
-        });
-        this.axios.get('/comment/mv?id='+id).then(res => {
-          if (res.hotComments.length <= 50) {
-            this.getMVcomment(res.hotComments)
-          }
-          //console.log(res.hotComments)
-        })
-        location.href = '#/mv'
+        location.href = '#/mv/'+id;
       },
       handleSizeChange(val) {
         //console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         this.currentPage = val;
-      }
+        window.scrollTo(0, 0);
+      },
+      async getSingerDetail(id) {
+        let music = await this.axios.get('/artists?id='+id);
+        let mv = await this.axios.get('/artists?id='+id);
+        let album = await this.axios.get('/artists?id='+id);
+        let introduction = await this.axios.get('/artists?id='+id);
+        return [music, mv, album, introduction];
+      },
     },
     mounted() {
-      this.music = this.singerDetails[0];
-      this.picUrl = this.music.artist.picUrl;
-      this.name = this.music.artist.name;
-      this.briefDesc = this.music.artist.briefDesc;
-      this.total = this.music.hotSongs.length;
-      this.hotSongs = this.music.hotSongs;
+      //console.log(this.$route.params.id)
+      this.getSingerDetail(this.$route.params.id).then(res => {
+        this.code = res[0].code;
+        this.singerDetails = res;
+        this.music = res[0];
+        this.picUrl = this.music.artist.picUrl;
+        this.name = this.music.artist.name;
+        this.briefDesc = this.music.artist.briefDesc;
+        this.total = this.music.hotSongs.length;
+        this.hotSongs = this.music.hotSongs;
+        //console.log(this.singerDetails)
+      });
       //console.log(this.music)
     },
     computed: {
-      ...mapState(['singerDetails'])
+      ...mapState([''])
     }
   }
 </script>

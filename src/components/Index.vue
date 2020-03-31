@@ -1,11 +1,21 @@
 <template>
   <div class="index center">
     <ul id="new1">
-    	<li class="new">推荐</li>
-    	<li>排行榜</li>
-    	<li>歌手</li>
-    	<li>歌单</li>
-    	<li>MV</li>
+    	<router-link to="/">
+        <li class="new">推荐</li>
+      </router-link>
+    	<router-link to="rankList">
+        <li>排行榜</li>
+      </router-link>
+    	<router-link to="singers">
+        <li>歌手</li>
+      </router-link>
+    	<router-link to="/songsheet">
+        <li>歌单</li>
+      </router-link>
+    	<router-link to="/mv">
+        <li>MV</li>
+      </router-link>
     </ul>
     <br><br>
     <el-carousel height="375px" :interval="5000">
@@ -47,7 +57,9 @@
     <div class="recommend ranking">
     	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 25px;">排行榜</h3>
     	<div class="nav">
-    		<a href="javascript:;">更多</a>
+    		<router-link to="/rankList">
+          <a href="javascript:;">更多</a>
+        </router-link>
     	</div>
     	<p></p>
       <div class="Bang">
@@ -80,13 +92,13 @@
     			<a href="javascript:;">欧美</a>
     			<a href="javascript:;">日韩</a>
     			<a href="javascript:;">组合</a>
-    			<a href="javascript:;">更多</a>
+    			<a href="#/singers">更多</a>
     		</div>
     		<p></p>
     	</div>
     	<div class="peopleImg">
     		<div class="content" v-for="(i, index) in singerImg" :key="index">
-    			<img v-loading.fullscreen.lock="fullscreenLoading" @click="getAsyncSingerDetail(i.id)" :src="i.img1v1Url" >
+    			<img  @click="getAsyncSingerDetail(i.id)" :src="i.img1v1Url" >
     			<p>{{i.name}}</p>
     			<p>{{i.musicSize}}首歌曲</p>
     		</div>
@@ -147,13 +159,10 @@
       // 获取歌单详细
       getrecommendSongs(id) {
         this.fullscreenLoading = true;
-        this.axios.get("/playlist/detail?id="+id).then(res => {
-          this.getRecommendSongs(res.playlist)
-        })
         setTimeout(() => {
           this.fullscreenLoading = false;
-          location.href = '#/songsheet'
-        }, 1500) 
+          location.href = '#/songsheet/'+id
+        }, 0)
       },
       // 获取 Banner
       getBanner() {
@@ -206,13 +215,10 @@
       },
       getAsyncSingerDetail(id) {
         this.fullscreenLoading = true;
-        this.getSingerDetail(id).then(res => {
-          this.getsingerDetails(res);
-        });
         setTimeout(() => {
           this.fullscreenLoading = false;
-          location.href = '#/singerdetails';
-        }, 1500)
+          location.href = '#/singerdetails/'+id;
+        }, 0)
       }
     },
     computed: {
