@@ -31,7 +31,7 @@
     		<a href="javascript:;">网络</a>
     		<a href="javascript:;">伤感</a>
     		<a href="javascript:;">欧美</a>
-    		<a href="javascript:;">更多</a>
+    		<a href="#/songsheet">更多</a>
     	</div>
     	<br><br>
     	<div class="Item">
@@ -112,14 +112,14 @@
     			<span>畅听更多精品电台</span>
     		</a>
     	</div>
-    	<div class="content" v-for="i in 3" :key="i">
-    		<div class="list" v-for="j in 3" :key="j">
+    	<div class="content">
+    		<div class="list" v-for="(i, index) in radioStation" :key="index">
     			<div class="list_img">
-    				<img v-if="radioStation[j+1]" :src="radioStation[j+1].picUrl" >
+    				<img :src="i.picUrl" >
     			</div>
     			<div class="text">
-    				<p v-if="radioStation[j+1]">{{radioStation[j+1].name}}</p>
-    				<p v-if="radioStation[j+1]">{{radioStation[j+1].copywriter}}</p>
+    				<p>{{i.name}}</p>
+    				<p>{{i.creatorName}}</p>
     			</div>
     		</div>
     	</div>
@@ -195,8 +195,8 @@
       // 推荐电台
       getRadioStation() {
         let that = this;
-        this.axios.get("/personalized/djprogram").then(res => {
-          that.radioStation = res.result;
+        this.axios.get("/dj/toplist/pay?limit=9").then(res => {
+          that.radioStation = res.data.list;
         })
       },
       // 播放音乐
@@ -325,6 +325,9 @@
   	width: 100%;
   	height: 206.133px;
   }
+  .index .activity img:hover {
+    cursor: pointer;
+  }
   .index #img {
   	display: -webkit-flex; /* Safari */
   	display: flex;
@@ -440,6 +443,7 @@
   }
   .anchorStation .content {
   	display: flex;
+    flex-wrap: wrap;
   	justify-content: space-between;
   }
   .anchorStation .content img {
@@ -460,9 +464,9 @@
   .anchorStation .content .text {
   	float: left;
   	margin-left: 20px;
+    width: 70%;
   }
   .anchorStation .content .text p {
-    width: 80%;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -470,19 +474,20 @@
     -webkit-box-orient: vertical;
     margin-top: 5%;
   }
+  .anchorStation .content .text p:nth-child(1) {
+  	font-size: 18px;
+  	margin-top: 15px;
+    margin-bottom: 10px;
+  }
+  .anchorStation .content .text p:nth-child(2) {
+  	font-size: 15px;
+  	color: #999999;
+  }
   .anchorStation .content .text p:nth-child(1):hover {
   	font-weight: 600;
   	cursor: pointer;
   }
   .anchorStation .content .text p:nth-child(2):hover {
   	cursor: pointer;
-  }
-  .anchorStation .content .text p:nth-child(1) {
-  	font-size: 18px;
-  	margin-top: 15px;
-  }
-  .anchorStation .content .text p:nth-child(2) {
-  	font-size: 15px;
-  	color: #999999;
   }
 </style>

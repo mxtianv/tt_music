@@ -8,7 +8,7 @@
       </div>
     </router-link>
   </div>
-  <div v-else class="song-sheet center">
+  <div v-else class="song-sheet center" v-loading.fullscreen.lock="fullscreenLoading">
     <div class="left">
       <img :src="recommendSongs.coverImgUrl" alt="">
       <strong>歌单介绍</strong>
@@ -78,7 +78,8 @@
         currentPage: 1,
         total: 0,
         recommendSongs: '',
-        code: 200
+        code: 200,
+        fullscreenLoading:true
       }
     },
     methods: {
@@ -109,7 +110,10 @@
         this.code = res.code;
         this.total = res.playlist.tracks.length;
       })
-      //console.log(this.recommendSongs.tracks.length)
+      window.scrollTo(0, 0);
+      setTimeout(() => {
+        this.fullscreenLoading = false
+      }, 1200)
     }
   }
 </script>

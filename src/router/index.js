@@ -9,6 +9,8 @@ import SingerDetails from '../components/SingerDetails.vue'
 import HotMV from '../components/HotMV.vue'
 import RankList from '../components/RankList.vue'
 import Singers from '../components/Singers.vue'
+import PlayLists from '../components/PlayLists.vue'
+import Error from '../components/Error.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -20,6 +22,12 @@ const routes = [
   },
   {
     path: '/music',
+    name: 'Error',
+    component: Error,
+    meta: {title:"音乐列表"}
+  },
+  {
+    path: '/music/:keyword',
     name: 'Music',
     component: Music,
     meta: {title:"音乐列表"}
@@ -41,6 +49,12 @@ const routes = [
     name: 'MV',
     component: MV,
     meta: {title:"音乐MV"}
+  },
+  {
+    path: '/songsheet',
+    name: 'PlayLists',
+    component: PlayLists,
+    meta: {title:"全部歌单"}
   },
   {
     path: '/songsheet/:id',

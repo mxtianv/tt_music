@@ -19,11 +19,7 @@ export default new Vuex.Store({
     },
     getMusicBang(state, list) {
       state.bang = list;
-    },
-    changeRouting(state, route) {
-      state.currentRouting = route;
-    },
-
+    }
   },
   actions: {
   },

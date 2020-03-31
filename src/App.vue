@@ -104,14 +104,9 @@
       }
     },
     methods: {
-      ...mapMutations(['getMusicList', 'changeRouting']),
+      ...mapMutations(['getMusicList']),
       musicList() {
-        this.fullscreenLoading = true;
-        this.axios.get('/search?keywords='+this.keyword).then(res => {
-          this.getMusicList(res.result);
-        })
-
-        location.href = '#/music'
+        location.href = '#/music/'+this.keyword;
       },
       fanhui() {
       	if(this.$(document).scrollTop() >= 500)
@@ -120,11 +115,10 @@
       }
     },
     computed: {
-      ...mapState(['music', 'currentRouting'])
+      ...mapState(['music'])
     },
     mounted() {
       let that = this;
-      this.changeRouting('index');
       this.$(".fh0").hide();
       this.fanhui();
       this.$(window).scroll(function(){

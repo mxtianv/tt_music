@@ -25,7 +25,7 @@
             label="序号"
             width="180">
             <template slot-scope="scope">
-              <span>{{scope.$index+1}}</span>
+              <span>{{scope.$index+1+(newPage-1)*30}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -53,6 +53,16 @@
             </template>
           </el-table-column>
         </el-table>
+        <br>
+        <el-pagination
+          class="center"
+          background
+          style="width: 30%;"
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+          :page-size="30"
+          :total="100">
+        </el-pagination>
     </div>
   </div>
 </template>
@@ -62,11 +72,13 @@
   export default {
     data() {
       return {
-        fullscreenLoading: false
+        fullscreenLoading: false,
+        musicList: [],
+        newPage: 1
       }
     },
     methods: {
-      ...mapMutations(['changeRouting', 'playMusic', 'getMV', 'getMVinfo', 'getMVcomment']),
+      ...mapMutations(['playMusic']),
       getMusicUrl(id) {
         this.axios.get('/song/url?id='+id).then(res => {
           this.playMusic(res.data[0].url)
@@ -74,26 +86,29 @@
       },
       getMusicMV(id) {
         this.playMusic(0);
-        this.axios.get('/mv/url?id='+id).then(res => {
-          this.getMV(res.data.url)
-        });
-        this.axios.get('/mv/detail?mvid='+id).then(res => {
-          this.getMVinfo(res.data)
-        });
-        this.axios.get('/comment/mv?id='+id).then(res => {
-          if (res.hotComments.length <= 50) {
-            this.getMVcomment(res.hotComments)
-          }
-          //console.log(res.hotComments)
+        location.href = '#/mv/'+id
+      },
+      getMusicList(keyword) {
+        this.axios.get('/search?keywords='+keyword).then(res => {
+          this.musicList = res.result;
         })
-        location.href = '#/mv'
+      },
+      getNewMusicList(val) {
+        this.axios.get('/search?offset='+(val - 1) * 30+'&keywords='+this.$route.params.keyword).then(res => {
+          this.musicList = res.result;
+        })
+      },
+      handleCurrentChange(val) {
+        this.getNewMusicList(val);
+        this.newPage = val;
+        window.scrollTo(0, 0);
       }
     },
     computed: {
-      ...mapState(['musicList'])
+
     },
     mounted() {
-      this.changeRouting('music')
+      this.getMusicList(this.$route.params.keyword);
     }
   }
 </script>

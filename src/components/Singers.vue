@@ -1,5 +1,5 @@
 <template>
-  <div class="singers">
+  <div class="singers" v-loading.fullscreen.lock="fullscreenLoading">
     <ul id="new1">
     	<router-link to="/">
         <li>推荐</li>
@@ -43,7 +43,8 @@
     data() {
       return {
         singerImg: [],
-        newSingerImg: []
+        newSingerImg: [],
+        fullscreenLoading: true
       }
     },
     methods: {
@@ -55,10 +56,14 @@
         }, 0)
       },
       getSingers(val) {
+        this.fullscreenLoading = true;
         let that = this;
         this.axios.get("/top/artists?offset="+(val - 1)*30+"&limit=30").then(res => {
           that.singerImg = res.artists;
         })
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 1000)
       },
       handleCurrentChange(val) {
         this.getSingers(val);
