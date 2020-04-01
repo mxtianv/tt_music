@@ -30,6 +30,7 @@ const routes = [
     path: '/music/:keyword',
     name: 'Music',
     component: Music,
+    props: true,
     meta: {title:"音乐列表"}
   },
   {

@@ -77,23 +77,6 @@
 </script>
 
 <style scoped="scoped">
-  #new1 {
-  	margin-left: 15%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 15px;
-    color: #333;
-  }
-  #new1 li {
-  	list-style: none;
-  	margin-left: 30px;
-  	float: left;
-  	cursor: pointer;
-  }
-  .new {
-  	font-weight: 600;
-  	box-shadow:0px 2px 3px #F0E423;
-  }
   .singers .peopleImg img {
   	width: 166px;
   	height: 166px;

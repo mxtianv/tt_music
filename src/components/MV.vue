@@ -1,12 +1,23 @@
 <template>
   <div class="mv">
-    <div id="new3" class="nav">
-    	<router-link to="/music">单曲</router-link>
-    	<a href="javascript:;">专辑</a>
-      <router-link to="/mv" class="new">MV</router-link>
-    	<a href="javascript:;">歌单</a>
-    	<a href="javascript:;">歌手</a>
-    </div>
+    <ul id="new1">
+    	<router-link to="/">
+        <li>推荐</li>
+      </router-link>
+    	<router-link to="rankList">
+        <li>排行榜</li>
+      </router-link>
+    	<router-link to="singers">
+        <li>歌手</li>
+      </router-link>
+    	<router-link to="/songsheet">
+        <li>歌单</li>
+      </router-link>
+    	<router-link to="/mv">
+        <li class="new">MV</li>
+      </router-link>
+    </ul>
+    <br>
     <!-- 播放MV -->
     <div style="padding-bottom: 20px;" class="musicMv">
     	<div ref='video' class="video_con">

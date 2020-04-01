@@ -31,7 +31,7 @@
           <el-table-column
             label="歌曲">
             <template slot-scope="scope">
-              <span @click="getMusicUrl(scope.row.id)" class="music_name">{{scope.row.name}}</span>
+              <span @click="getMusicUrl(scope.row.id, [scope.row.name, scope.row.artists[0].name])" class="music_name">{{scope.row.name}}</span>
               <img @click="getMusicMV(scope.row.mvid)" class="music_name" v-if="scope.row.mvid != 0" src="../assets/MV.png" alt="">
             </template>
           </el-table-column>
@@ -39,6 +39,9 @@
             label="歌手"
             width="180"
             prop="artists[0].name">
+            <template slot-scope="scope">
+              <span @click="getSinger(scope.row.artists[0].id)" class="music_name">{{scope.row.artists[0].name}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             label="专辑"
@@ -61,7 +64,7 @@
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
           :page-size="30"
-          :total="100">
+          :total="total">
         </el-pagination>
     </div>
   </div>
@@ -70,27 +73,33 @@
 <script>
   import {mapState, mapMutations} from 'vuex'
   export default {
+    props: ['keyword'],
     data() {
       return {
         fullscreenLoading: false,
         musicList: [],
-        newPage: 1
+        newPage: 1,
+        total: 90
       }
     },
     methods: {
-      ...mapMutations(['playMusic']),
-      getMusicUrl(id) {
+      ...mapMutations(['playMusic', 'playMusicInfo']),
+      getMusicUrl(id, name) {
         this.axios.get('/song/url?id='+id).then(res => {
           this.playMusic(res.data[0].url)
         })
+        this.playMusicInfo(name);
+      },
+      getSinger(id) {
+        location.href = '#/singerdetails/'+id;
       },
       getMusicMV(id) {
         this.playMusic(0);
         location.href = '#/mv/'+id
       },
       getMusicList(keyword) {
-        this.axios.get('/search?keywords='+keyword).then(res => {
-          this.musicList = res.result;
+        this.axios.get('/search?limit=300&keywords='+keyword).then(res => {
+          this.total = res.result.length;
         })
       },
       getNewMusicList(val) {
@@ -108,7 +117,12 @@
 
     },
     mounted() {
-      this.getMusicList(this.$route.params.keyword);
+      this.getNewMusicList(1);
+    },
+    watch:{
+      keyword(val) {
+        location.reload();
+      }
     }
   }
 </script>

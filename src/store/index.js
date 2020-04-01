@@ -6,6 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
 	  music: 0,
+    musicName: 0,
+    musicSinger: 0,
     musicList: 0,
     bang: 0,
     currentRouting: 0,
@@ -13,6 +15,10 @@ export default new Vuex.Store({
   mutations: {
     playMusic(state, url) {
       state.music = url;
+    },
+    playMusicInfo(state, info) {
+      state.musicName = info[0];
+      state.musicSinger = info[1];
     },
     getMusicList(state, list) {
       state.musicList = list;

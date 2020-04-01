@@ -24,7 +24,9 @@
       	</ul>
       	<div class="right">
       		<input @keyup.enter="musicList" v-model="keyword" type="text" class="search" placeholder="请输入你想听的音乐">
-      		<span>登录 / 注册</span>
+      		<span @click="loginT">登录</span>
+          <span>/</span>
+          <span @click="registerT">注册</span>
       	</div>
       </div>
     </div>
@@ -33,12 +35,16 @@
       <router-view></router-view>
     </div>
     <!-- 音乐播放器 -->
-    <div v-if="music != 0" style="bottom: 0px;" class="musicPlay" >
-    	<div style="width: 60%;" class="center">
-    		<div class="audio_con">
-    		  <audio ref='audio' :src="music" controls autoplay loop class="myaudio"></audio>
-    		</div>
-    	</div>
+    <div v-if="music != 0" class="musicPlay" >
+      <i style="margin-left: 97%;background: mediumslateblue;padding: 5px;" class="el-icon-lock"></i>
+    	<aplayer autoplay :music="{
+          title: musicName,
+          author: musicSinger,
+          url: music,
+          pic: 'http://devtest.qiniudn.com/Preparation.jpg',
+          lrc: '[00:00.00]lrc here\n[00:01.00]aplayer'
+        }">
+    	</aplayer>
     </div>
     <!-- 网页底部 -->
     <div class="footer">
@@ -92,15 +98,68 @@
     	<p>根据酷我音乐官网样式制作 丨 根据酷我音乐官网样式制作 丨 根据酷我音乐官网样式制作</p>
     	<p>举报电话：xxx-xxxxxxx 丨 举报邮箱：xxx@xx.cn</p>
     </div>
+    <el-dialog :title="title" :visible.sync="login" width="25%">
+        <div class="login">
+          <img src="./assets/user.png" alt="">
+          <el-input
+            placeholder="请输入用户名"
+            prefix-icon="el-icon-user"
+            v-model="username">
+          </el-input>
+          <el-input
+            placeholder="请输入密码"
+            show-password
+            prefix-icon="el-icon-lock"
+            v-model="password">
+          </el-input>
+          <el-input
+            v-if="title == '注册'"
+            placeholder="请再次输入密码"
+            show-password
+            prefix-icon="el-icon-lock"
+            v-model="comPassword">
+          </el-input>
+          <div v-if="title == '登录'" class="find-reg">
+            <p>忘记密码</p>
+            <p @click="toregister">立即注册</p>
+          </div>
+          <button v-if="title == '登录'" @click="comBtn(1)">{{title}}</button>
+          <button v-if="title == '注册'" @click="comBtn(0)">{{title}}</button>
+        </div>
+        <el-divider v-if="title == '登录'">
+          <span>其他账户登录</span>
+        </el-divider>
+        <el-divider v-if="title == '注册'">
+          <a style="color: #00BFFF;" href="javascript:;" @click="tologin">已有账号?立即登录</a>
+        </el-divider>
+        <div class="else-login" v-if="title == '登录'">
+          <img src="./assets/QQ.png" alt="">
+          <img src="./assets/微信.png" alt="">
+          <img src="./assets/新浪.png" alt="">
+        </div>
+        <br>
+    </el-dialog>
   </div>
 </template>
 <script>
   import {mapState, mapMutations} from 'vuex'
+  import Aplayer from 'vue-aplayer'
   export default {
+    components: {
+      Aplayer
+    },
     data() {
       return {
         keyword:'',
-        fullscreenLoading: false
+        fullscreenLoading: false,
+        login: false,
+        register: false,
+        username: '',
+        password: '',
+        comPassword: '',
+        title: '登录',
+        n:1,
+        bf: true
       }
     },
     methods: {
@@ -112,10 +171,57 @@
       	if(this.$(document).scrollTop() >= 500)
       	this.$(".fh0").fadeIn();
       	else this.$(".fh0").fadeOut();
+      },
+      loginT() {
+        this.login = true;
+        this.title = '登录';
+        this.username = '';
+        this.password = '';
+        this.comPassword = '';
+      },
+      registerT() {
+        this.login = true;
+        this.title = '注册';
+        this.username = '';
+        this.password = '';
+        this.comPassword = '';
+      },
+      tologin() {
+        this.title = '登录';
+        this.username = '';
+        this.password = '';
+        this.comPassword = '';
+      },
+      toregister() {
+        this.title = '注册';
+        this.username = '';
+        this.password = '';
+        this.comPassword = '';
+      },
+      comBtn(id) {
+        if (id == 1) {
+          if (this.username == '') {
+            this.$message.error('请输入用户名');
+          } else if (this.password == ''){
+            this.$message.error('请输入密码');
+          } else {
+            this.$message.error('登录失败，账户或密码错误！');
+          }
+        } else{
+          if (this.username.length < 6 || this.username.length > 15 ) {
+            this.$message.error('用户名要求6-15个字符之间');
+          } else if (this.password.length < 6 || this.password.length > 15 ){
+            this.$message.error('密码要求6-15个字符之间');
+          } else if (this.password != this.comPassword){
+            this.$message.error('两次输入密码不一致');
+          }else {
+            this.$message.error('注册系统暂未开放！');
+          }
+        }
       }
     },
     computed: {
-      ...mapState(['music'])
+      ...mapState(['music', 'musicName', 'musicSinger'])
     },
     mounted() {
       let that = this;
@@ -129,6 +235,26 @@
       		scrollTop: 0
       	});
       });
+      this.$('.musicPlay .el-icon-lock').click(() => {
+        if (this.n == 1) {
+          this.$('.aplayer').fadeOut();
+          this.n = 0;
+          console.log(1)
+          this.$('.musicPlay').css('bottom', '0px');
+        }
+        else {
+          this.$('.aplayer').fadeIn();
+          this.n = 1;
+          this.$('.musicPlay').css('bottom', '50px');
+        }
+      })
+    },
+    watch: {
+      music(val) {
+        this.$('.aplayer').fadeIn();
+        this.n = 1;
+        this.$('.musicPlay').css('bottom', '50px');
+      }
     }
   }
 
@@ -145,6 +271,72 @@
   }
   a:hover{
   	text-decoration: none;
+  }
+  .login {
+    width: 80%;
+    margin: auto;
+  }
+  .login img {
+    width: 278px;
+    height: 114px;
+  }
+  .login .el-input {
+    margin-bottom: 15px;
+  }
+  .login button {
+    width: 100%;
+    height: 40px;
+    background: #ffe200;
+    border: none;
+    font-size: 17px;
+    margin-top: 15px;
+    outline:none;
+  }
+  button:focus {
+    outline:none;
+  }
+  .login button:hover {
+    cursor: pointer;
+  }
+  .login .find-reg {
+    display: flex;
+    justify-content: space-between;
+  }
+  .login .find-reg p:hover {
+    cursor: pointer;
+  }
+  .else-login {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+  }
+  .else-login img {
+    padding: 5px;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 50%;
+    transition: .5s;
+  }
+  .else-login img:hover {
+    cursor: pointer;
+    background: rgba(0,0,0,.02);
+  }
+  #new1 {
+  	margin-left: 15%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: #333;
+  }
+  #new1 li {
+  	list-style: none;
+  	margin-left: 30px;
+  	float: left;
+  	cursor: pointer;
+  }
+  .new {
+  	font-weight: 600;
+  	box-shadow:0px 2px 3px #F0E423;
   }
   .err {
     width: 520px;
@@ -255,7 +447,13 @@
   	position: fixed;
   	width: 100%;
   	height:50px;
-  	bottom: 20px;
+  	bottom: 50px;
+    width: 86%;
+    margin-left: 7%;
+  }
+  .musicPlay p {
+    margin-left: 20%;
+    margin-top: 10px;
   }
   .musicPlay .center a{
   	color: red;

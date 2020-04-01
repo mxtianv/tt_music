@@ -74,7 +74,7 @@
               <span class="p_id">{{j}}</span>
               <div class="title">
                 <div class="music_name">
-                  <span @click="getMusicUrl(i.tracks[j].id)">{{i.tracks[j].name}}</span>
+                  <span @click="getMusicUrl(i.tracks[j].id, i.tracks[j].name, i.tracks[j].ar[0].name)">{{i.tracks[j].name}}</span>
                 </div>
                 <p>{{i.tracks[j].ar[0].name}}</p>
               </div>
@@ -148,7 +148,7 @@
       }
     },
     methods: {
-      ...mapMutations(['playMusic', 'getMusicBang', 'getRecommendSongs', 'getsingerDetails']),
+      ...mapMutations(['playMusic', 'getMusicBang', 'getRecommendSongs', 'getsingerDetails', 'playMusicInfo']),
       // 获取歌单封面
       getSongSheetImg() {
         let that = this;
@@ -200,9 +200,10 @@
         })
       },
       // 播放音乐
-      getMusicUrl(id) {
+      getMusicUrl(id, musicname, singername) {
         this.axios.get('/song/url?id='+id).then(res => {
           this.playMusic(res.data[0].url);
+          this.playMusicInfo([musicname, singername]);
         })
       },
       // 歌手详细
