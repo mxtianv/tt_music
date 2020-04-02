@@ -88,7 +88,7 @@
     	<div class="recommend">
     		<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 15px;">歌手推荐</h3>
     		<div id="new2" class="nav">
-    			<a class="new" href="javascript:;">华语</a>
+    			<a class="new" href="javascript:;">推荐</a>
     			<!-- <a href="javascript:;">欧美</a>
     			<a href="javascript:;">日韩</a>
     			<a href="javascript:;">组合</a> -->
@@ -263,6 +263,9 @@
   .el-carousel__item img {
     width: 100%;
     height: 100%;
+  }
+  .el-carousel__item img:hover {
+    cursor: pointer;
   }
   .el-carousel__item:nth-child(2n) {
     background-color: #99a9bf;

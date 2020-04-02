@@ -23,6 +23,7 @@
       		<li>更多</li>
       	</ul>
       	<div class="right">
+          <i style="position: relative;left: 25px;color: #666;" class="el-icon-search"></i>
       		<input @keyup.enter="musicList" v-model="keyword" type="text" class="search" placeholder="请输入你想听的音乐">
       		<span @click="loginT">登录</span>
           <span>/</span>
@@ -85,7 +86,7 @@
     			<br>
     				<span>
     					<a href="#">联系我们</a>
-    					<a href="#">腾讯音乐</a>
+    					<a href="#">听听音乐</a>
     					<a href="#">诚聘英才</a>
     				</span>
     				<span>
@@ -236,7 +237,7 @@
       }
     },
     computed: {
-      ...mapState(['music', 'musicName', 'musicSinger'])
+      ...mapState(['music', 'musicName', 'musicSinger', 'musicSign'])
     },
     mounted() {
       let that = this;
@@ -255,6 +256,9 @@
       music(val) {
         this.n = 1;
         //console.log(val)
+      },
+      musicSign(val) {
+        this.$message.error('没有找到该歌曲');
       }
     }
   }
@@ -272,6 +276,16 @@
   }
   a:hover{
   	text-decoration: none;
+  }
+  .singer .info p:nth-child(2) {
+    font-size: 19px;
+    color: #666;
+    line-height: 35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
   }
   .music_name:hover {
     color: #00BFFF;
@@ -454,7 +468,7 @@
   	background: #f5f5f5;
   	border: none;
   	outline: none;
-    padding-left: 15px;
+    padding-left: 30px;
   }
   .header .right span {
   	margin-left: 10px;

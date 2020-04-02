@@ -41,8 +41,10 @@
           </el-table-column>
           <el-table-column
             label="歌手"
-            width="180"
-            prop="ar[0].name">
+            width="180">
+            <template slot-scope="scope">
+              <span @click="getSinger(scope.row.ar[0].id)" class="music_name">{{scope.row.ar[0].name}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             label="时长"
@@ -100,7 +102,10 @@
       handleCurrentChange(val) {
         this.currentPage = val;
         window.scrollTo(0, 0);
-      }
+      },
+      getSinger(id) {
+        location.href = '#/singerdetails/'+id;
+      },
     },
     computed: {
 

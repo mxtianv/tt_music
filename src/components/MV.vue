@@ -1,5 +1,5 @@
 <template>
-  <div class="mv">
+  <div class="mv" v-loading.fullscreen.lock="fullscreenLoading">
     <ul id="new1">
     	<router-link to="/">
         <li>推荐</li>
@@ -53,13 +53,16 @@
       return {
         MV: '',
         MVinfo: '',
-        MVcomment: ''
+        MVcomment: '',
+        fullscreenLoading: true
       }
     },
     methods: {
       getMV(id) {
+        let that = this;
         this.axios.get('/mv/url?id='+id).then(res => {
           this.MV = res.data.url;
+          that.fullscreenLoading = false;
         });
         this.axios.get('/mv/detail?mvid='+id).then(res => {
           this.MVinfo = res.data;
@@ -74,6 +77,7 @@
     },
     mounted() {
       this.getMV(this.$route.params.id);
+      window.scrollTo(0, 0)
     },
     computed: {
 

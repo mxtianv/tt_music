@@ -10,10 +10,10 @@
   </div>
   <div v-else class="song-sheet center" v-loading.fullscreen.lock="fullscreenLoading">
     <div class="left">
-      <img :src="recommendSongs.album.picUrl" alt="">
+      <img :src="leftTit" alt="">
       <strong>专辑介绍</strong>
       <div class="info">
-        <p>{{recommendSongs.album.description}}</p>
+        <p>{{info}}</p>
       </div>
       <div class="down">
         <span>下载该专辑</span>
@@ -21,7 +21,7 @@
       <el-divider></el-divider>
     </div>
     <div class="right">
-      <strong>{{recommendSongs.album.name}} 歌曲列表</strong>
+      <strong>{{rightTit}} 歌曲列表</strong>
       <el-table
           v-if="recommendSongs.songs !== undefined && recommendSongs.songs.length>0"
           :data="recommendSongs.songs.slice((currentPage-1)*pagesize,currentPage*pagesize)"
@@ -81,7 +81,10 @@
         total: 0,
         recommendSongs: '',
         code: 200,
-        fullscreenLoading:true
+        fullscreenLoading:true,
+        leftTit: '',
+        info: '',
+        rightTit: '',
       }
     },
     methods: {
@@ -110,6 +113,9 @@
     mounted() {
       this.axios.get("/album?id="+this.$route.params.id).then(res => {
         this.recommendSongs = res;
+        this.leftTit = res.album.picUrl;
+        this.info = res.album.description;
+        this.rightTit = res.album.name;
         //this.code = res.code;
         this.total = res.songs.length;
         setTimeout(() => {

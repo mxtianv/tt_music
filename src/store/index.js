@@ -8,6 +8,7 @@ export default new Vuex.Store({
 	  music: 0,
     musicName: 0,
     musicSinger: 0,
+    musicSign: 0,
     musicList: 0,
     bang: 0,
     currentRouting: 0,
@@ -16,7 +17,8 @@ export default new Vuex.Store({
     playMusic(state, url) {
       state.music = url;
       if (url == null) {
-       alert('没有找到该歌曲');
+       //alert('没有找到该歌曲');
+       state.musicSign++
       }
     },
     playMusicInfo(state, info) {

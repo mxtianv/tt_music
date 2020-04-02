@@ -40,64 +40,30 @@
     </div>
     <div class="center">
       <ul id="new1">
-      	<li class="new">单曲</li>
+      	<li @click="returnSinger">单曲</li>
       	<li @click="returnAlbum">专辑</li>
       	<li @click="returnSingerMV">MV</li>
-        <li @click="returnSingerInfo">简介</li>
+        <li @click="returnSingerInfo" class="new">简介</li>
       </ul>
-      <br>
-      <el-table
-          v-if="hotSongs !== undefined && hotSongs.length>0"
-          :data="hotSongs.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-          stripe
-          style="width: 100%; min-height: 500px;">
-          <el-table-column
-            label="序号"
-            width="80">
-            <template slot-scope="scope">
-              <span>{{scope.$index+1 + 30*(currentPage-1)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="歌曲">
-            <template slot-scope="scope">
-              <span @click="getMusicUrl(scope.row.id, [scope.row.name, scope.row.ar[0].name])" class="music_name">{{scope.row.name}}</span>
-              <img @click="getMusicMV(scope.row.mv)" class="music_name" v-if="scope.row.mv != 0" src="../assets/MV.png" alt="">
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="歌手"
-            width="280">
-            <template slot-scope="scope">
-              <span v-for="(i, index) in scope.row.ar" :key="index">{{i.name}} </span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="专辑"
-            width="200"
-            prop="al.name">
-          </el-table-column>
-          <el-table-column
-            label="时长"
-            width="200">
-            <template slot-scope='scope'>
-              <span>{{(scope.row.dt / 1000 / 60).toFixed(2)}}分钟</span>
-            </template>
-          </el-table-column>
-        </el-table>
-        <br>
-         <div class="block">
-            <el-pagination
-              background
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-sizes="[30]"
-              :page-size="100"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
-            </el-pagination>
+      <br><br>
+      <div class="info">
+        <div class="title">
+          <strong>简介</strong>
+        </div>
+        <div class="con">
+          {{briefintr.briefDesc}}
+        </div>
+      </div>
+      <div class="content" v-for="(i, index) in briefintr.introduction" :key="index">
+        <div class="info">
+          <div class="title">
+            <strong>{{i.ti}}</strong>
           </div>
+          <div class="con">
+            <pre v-html="i.txt"></pre>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -111,13 +77,15 @@
         picUrl: '',
         name: '',
         briefDesc: '',
-        pagesize: 30,
+        pagesize: 28,
         currentPage: 1,
         total: 0,
         hotSongs: '',
         singerDetails: '',
         code: 200,
-        fullscreenLoading:true
+        album: [],
+        fullscreenLoading: true,
+        briefintr: []
       }
     },
     methods: {
@@ -137,14 +105,15 @@
       },
       handleCurrentChange(val) {
         this.currentPage = val;
+        this.getAlbum(val);
         window.scrollTo(0, 0);
       },
       async getSingerDetail(id) {
         let music = await this.axios.get('/artists?id='+id);
-        //let mv = await this.axios.get('/artists?id='+id);
-        //let album = await this.axios.get('/artists?id='+id);
-        //let introduction = await this.axios.get('/artists?id='+id);
-        return [music];
+        //let mv = await this.axios.get('/artist/mv?id='+id);
+        let briefIntr = await this.axios.get('/artist/desc?id='+id);
+        //let introduction = await this.axios.get('/artist/desc?id='+id);
+        return [music, briefIntr];
       },
       returnSinger() {
         location.href = '#/singerdetails/'+this.$route.params.id;
@@ -160,28 +129,24 @@
       }
     },
     mounted() {
+      let that = this;
       //console.log(this.$route.params.id)
       this.getSingerDetail(this.$route.params.id).then(res => {
-        //this.code = res[0].code;
-        this.singerDetails = res;
-        this.music = res[0];
-        this.picUrl = this.music.artist.picUrl;
-        this.name = this.music.artist.name;
-        this.briefDesc = this.music.artist.briefDesc;
-        this.total = this.music.hotSongs.length;
-        this.hotSongs = this.music.hotSongs;
-        setTimeout(() => {
-          this.fullscreenLoading = false;
-        }, 1000)
-        //console.log(this.singerDetails)
+        that.singerDetails = res;
+        that.music = res[0];
+        that.picUrl = that.music.artist.picUrl;
+        that.name = that.music.artist.name;
+        that.briefDesc = that.music.artist.briefDesc;
+        that.briefintr = res[1];
+        that.fullscreenLoading = false
       }, err => {
-        this.code = 404;
+        that.code = 404;
         setTimeout(() => {
-          this.fullscreenLoading = false;
+          that.fullscreenLoading = false;
         }, 1000)
       });
-      //console.log(this.music)
       window.scrollTo(0, 0)
+      //console.log(this.music)
     },
     computed: {
       ...mapState([''])
@@ -264,5 +229,18 @@
   	float: left;
   	cursor: pointer;
     font-size: 25px;
+  }
+  .title {
+    font-size: 20px;
+    padding-left: 10px;
+    border-left: 6px solid #F0E423;
+    color: #333;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .con {
+    line-height: 25px;
+    font-size: 14px;
+    color: #666666;
   }
 </style>

@@ -159,12 +159,14 @@
         window.scrollTo(0, 0);
       },
       getMusicList(id) {
+        this.fullscreenLoading = true;
         this.axios.get('/top/list?idx='+id).then(res => {
           this.musicList = res.playlist;
           this.title = res.playlist.name;
           this.total = res.playlist.tracks.length;
           this.newIndex = id;
-      })
+          this.fullscreenLoading = false;
+        })
       },
       getSinger(id) {
         location.href = '#/singerdetails/'+id
@@ -175,9 +177,6 @@
     },
     mounted() {
       this.getMusicList(0);
-      setTimeout(() => {
-        this.fullscreenLoading = false;
-      }, 1200);
       window.scrollTo(0, 0)
     }
   }

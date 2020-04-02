@@ -43,7 +43,7 @@
       	<li @click="returnSinger">单曲</li>
       	<li @click="returnAlbum">专辑</li>
       	<li @click="returnSingerMV" class="new">MV</li>
-        <li>简介</li>
+        <li @click="returnSingerInfo">简介</li>
       </ul>
       <br><br>
       <div class="mv">

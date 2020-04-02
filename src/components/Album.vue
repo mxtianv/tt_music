@@ -43,7 +43,7 @@
       	<li @click="returnSinger">单曲</li>
       	<li @click="returnAlbum" class="new">专辑</li>
       	<li @click="returnSingerMV">MV</li>
-        <li>简介</li>
+        <li @click="returnSingerInfo">简介</li>
       </ul>
       <br><br>
       <div class="mv">
@@ -134,7 +134,7 @@
         }, 1000)
       },
       goAlbum(id) {
-        location.href = '#/AlbumDetails/'+id;
+        location.href = '#/albumdetails/'+id;
       },
       returnSinger() {
         location.href = '#/singerdetails/'+this.$route.params.id;
@@ -163,6 +163,7 @@
         that.briefDesc = that.music.artist.briefDesc;
         that.total = res[1].hotAlbums.length;
         that.hotSongs = that.music.hotSongs;
+        that.fullscreenLoading = false;
         //console.log(this.singerDetails)
       }, err => {
         that.code = 404;

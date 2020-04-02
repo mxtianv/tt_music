@@ -14,6 +14,7 @@ import Error from '../components/Error.vue'
 import Album from '../components/Album.vue'
 import SingerMV from '../components/SingerMV.vue'
 import AlbumDetails from '../components/AlbumDetails.vue'
+import BriefIntr from '../components/BriefIntr.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -91,6 +92,10 @@ const routes = [
     redirect: '/error'
   },
   {
+    path: '/albumdetails',
+    redirect: '/error'
+  },
+  {
     path: '/album/:id',
     name: 'Album',
     component: Album,
@@ -115,7 +120,19 @@ const routes = [
     meta: {title:"歌手单曲"}
   },
   {
-    path: '/about',
+    path: '/singermv/:id',
+    name: 'SingerMV',
+    component: SingerMV,
+    meta: {title:"歌手MV"}
+  },
+  {
+    path: '/singerinfo/:id',
+    name: 'BriefIntr',
+    component: BriefIntr,
+    meta: {title:"歌手简介"}
+  },
+  {
+    path: '/about123321',
     name: 'About',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
