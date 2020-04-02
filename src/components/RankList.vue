@@ -177,7 +177,8 @@
       this.getMusicList(0);
       setTimeout(() => {
         this.fullscreenLoading = false;
-      }, 1200)
+      }, 1200);
+      window.scrollTo(0, 0)
     }
   }
 </script>

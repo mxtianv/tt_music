@@ -19,7 +19,7 @@
       <el-divider></el-divider>
     </div>
     <div class="right">
-      <strong>每日热门歌单推荐</strong>
+      <strong>{{recommendSongs.name}} 歌单列表</strong>
       <el-table
           v-if="recommendSongs.tracks !== undefined && recommendSongs.tracks.length>0"
           :data="recommendSongs.tracks.slice((currentPage-1)*pagesize,currentPage*pagesize)"
@@ -110,11 +110,11 @@
         this.recommendSongs = res.playlist;
         this.code = res.code;
         this.total = res.playlist.tracks.length;
+        setTimeout(() => {
+          this.fullscreenLoading = false
+        }, 1200)
       })
       window.scrollTo(0, 0);
-      setTimeout(() => {
-        this.fullscreenLoading = false
-      }, 1200)
     }
   }
 </script>

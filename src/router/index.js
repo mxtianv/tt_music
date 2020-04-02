@@ -11,6 +11,7 @@ import RankList from '../components/RankList.vue'
 import Singers from '../components/Singers.vue'
 import PlayLists from '../components/PlayLists.vue'
 import Error from '../components/Error.vue'
+import Album from '../components/Album.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -18,7 +19,7 @@ const routes = [
     path: '/',
     name: 'Index',
     component: Index,
-    meta: {title:"爱音乐"}
+    meta: {title:"听听音乐"}
   },
   {
     path: '/music',
@@ -74,10 +75,16 @@ const routes = [
     redirect: 'singers'
   },
   {
+    path: '/Album/:id',
+    name: 'Album',
+    component: Album,
+    meta: {title:"歌手专辑"}
+  },
+  {
     path: '/singerdetails/:id',
     name: 'SingerDetails',
     component: SingerDetails,
-    meta: {title:"歌手详情"}
+    meta: {title:"歌手单曲"}
   },
   {
     path: '/about',

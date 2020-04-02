@@ -20,20 +20,21 @@
     <br><br>
     <div class="title">
       <strong>精品歌单</strong>
-      <span class="new">最新</span>
+      <span @click="getgdList('new')" class="new">最新</span>
+      <span @click="getgdList('hot')">最热</span>
     </div>
     <div class="mv">
       <ul>
         <li v-for="(i, index) in newMVList" :key="index">
           <div class="img-p">
-            <div @click="moreInfo(i.id)" :style="'background: url('+i.picUrl+');'" class="img">
+            <div @click="moreInfo(i.id)" :style="'background: url('+i.coverImgUrl+');'" class="img">
               <div class="mask">
                 <img src="../assets/播放.png" alt="">
               </div>
             </div>
           </div>
           <p>{{i.name}}</p>
-          <p>{{i.artistName}}</p>
+          <!-- <p>{{i.artistName}}</p> -->
         </li>
       </ul>
        <div class="block">
@@ -82,21 +83,21 @@
         }
         window.scrollTo(0, 0);
       },
-      getMVList() {
+      getgdList(str) {
         let that = this;
         this.fullscreenLoading = true;
         this.MVList = [];
         this.newMVList = [];
-        this.axios.get('/personalized?limit=100').then(res => {
-          that.MVList = res.result;
-          this.total = res.result.length;
-          if(res.result.length > 30) {
+        this.axios.get('/top/playlist?limit=100&order='+str).then(res => {
+          that.MVList = res.playlists;
+          this.total = res.playlists.length;
+          if(res.playlists.length > 30) {
             for(let i = 0; i < 30; i++) {
-              this.newMVList.push(res.result[i])
+              this.newMVList.push(res.playlists[i])
             }
           }
           else {
-            this.newMVList = res.result
+            this.newMVList = res.playlists
           }
           setTimeout(() => {
             this.fullscreenLoading = false;
@@ -109,8 +110,8 @@
     },
     mounted() {
       let that = this;
-      this.getMVList();
-      this.$("#new2 li").click(function(){
+      this.getgdList('new');
+      this.$(".title span").click(function(){
       	that.$(this).addClass('new').siblings().removeClass('new');
       });
       setTimeout(() => {

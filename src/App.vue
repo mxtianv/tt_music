@@ -11,7 +11,7 @@
     </div>
     <div class="header">
       <div class="center">
-        <a href="#/"><img src="./assets/kuwo.png"></a>
+        <a href="#/"><img src="./assets/ttyy.png"></a>
       	<ul>
       		<router-link to="/">
             <li id="find">发现音乐</li>
@@ -35,16 +35,20 @@
       <router-view></router-view>
     </div>
     <!-- 音乐播放器 -->
-    <div v-if="music != 0" class="musicPlay" >
-      <i style="margin-left: 97%;background: mediumslateblue;padding: 5px;" class="el-icon-lock"></i>
-    	<aplayer autoplay :music="{
+    <div class="music-play" style="position: fixed;bottom: 0;width: 90%;left: 5%;mix-width: 100px;mix-height: 100px;" v-if="music != 0">
+      <i  @click="showM" class="el-icon-service"></i>
+      <!-- <i v-if="n != 1" @click="showM" style="margin-left: 97%;background: mediumslateblue;padding: 5px;display: inline-block;" class="el-icon-lock"></i> -->
+    	<div v-show="n == 1" class="audio_con">
+    	  <audio style="width: 100%;" ref='audio'  :src="music" controls autoplay loop class="myaudio"></audio>
+    	</div>
+      <!-- <aplayer v-show="n == 1"  autoplay :music="{
           title: musicName,
           author: musicSinger,
           url: music,
           pic: 'http://devtest.qiniudn.com/Preparation.jpg',
           lrc: '[00:00.00]lrc here\n[00:01.00]aplayer'
         }">
-    	</aplayer>
+      </aplayer> -->
     </div>
     <!-- 网页底部 -->
     <div class="footer">
@@ -98,6 +102,7 @@
     	<p>根据酷我音乐官网样式制作 丨 根据酷我音乐官网样式制作 丨 根据酷我音乐官网样式制作</p>
     	<p>举报电话：xxx-xxxxxxx 丨 举报邮箱：xxx@xx.cn</p>
     </div>
+    <!-- 登录注册 -->
     <el-dialog :title="title" :visible.sync="login" width="25%">
         <div class="login">
           <img src="./assets/user.png" alt="">
@@ -143,10 +148,12 @@
 </template>
 <script>
   import {mapState, mapMutations} from 'vuex'
-  import Aplayer from 'vue-aplayer'
+  // import Aplayer from 'vue-aplayer'
+  //import PlayMusic from './components/PlayMusic.vue'
   export default {
     components: {
-      Aplayer
+      //Aplayer
+      //PlayMusic
     },
     data() {
       return {
@@ -205,7 +212,7 @@
           } else if (this.password == ''){
             this.$message.error('请输入密码');
           } else {
-            this.$message.error('登录失败，账户或密码错误！');
+            this.$message.error('登录失败，用户名或密码错误！');
           }
         } else{
           if (this.username.length < 6 || this.username.length > 15 ) {
@@ -217,6 +224,14 @@
           }else {
             this.$message.error('注册系统暂未开放！');
           }
+        }
+      },
+      showM() {
+        if (this.n == 1) {
+          this.n = 0;
+        }
+        else {
+          this.n = 1;
         }
       }
     },
@@ -235,25 +250,11 @@
       		scrollTop: 0
       	});
       });
-      this.$('.musicPlay .el-icon-lock').click(() => {
-        if (this.n == 1) {
-          this.$('.aplayer').fadeOut();
-          this.n = 0;
-          console.log(1)
-          this.$('.musicPlay').css('bottom', '0px');
-        }
-        else {
-          this.$('.aplayer').fadeIn();
-          this.n = 1;
-          this.$('.musicPlay').css('bottom', '50px');
-        }
-      })
     },
     watch: {
       music(val) {
-        this.$('.aplayer').fadeIn();
         this.n = 1;
-        this.$('.musicPlay').css('bottom', '50px');
+        //console.log(this.n)
       }
     }
   }
@@ -271,6 +272,20 @@
   }
   a:hover{
   	text-decoration: none;
+  }
+  .music-play i {
+    position: absolute;
+    top: -24px;
+    right: 5px;
+    z-index: 2;
+    background: #00BFFF;
+    padding: 4px;
+    transition: .5s;
+  }
+  .music-play i:hover {
+    cursor: pointer;
+    background: orange;
+    color: blue;
   }
   .login {
     width: 80%;

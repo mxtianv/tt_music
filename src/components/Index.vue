@@ -26,18 +26,18 @@
     <div class="recommend">
     	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 10px;">推荐歌单</h3>
     	<div id="new2" class="nav">
-    		<a class="new" href="javascript:;">每日推荐</a>
-    		<a href="javascript:;">翻唱</a>
-    		<a href="javascript:;">网络</a>
-    		<a href="javascript:;">伤感</a>
-    		<a href="javascript:;">欧美</a>
+    		<a :class="{new: gedanIndex == 0}" @click="getSongSheetImg" href="javascript:;">每日推荐</a>
+    		<a :class="{new: gedanIndex == 1}" @click="getNewSongSheetImg('华语', 1)" href="javascript:;">华语</a>
+    		<a :class="{new: gedanIndex == 2}" @click="getNewSongSheetImg('古风', 2)" href="javascript:;">古风</a>
+    		<a :class="{new: gedanIndex == 3}" @click="getNewSongSheetImg('欧美', 3)" href="javascript:;">欧美</a>
+    		<a :class="{new: gedanIndex == 4}" @click="getNewSongSheetImg('流行', 4)" href="javascript:;">流行</a>
     		<a href="#/songsheet">更多</a>
     	</div>
     	<br><br>
     	<div class="Item">
     		<div class="item" v-for="(i, index) in img" :key="index">
     			<img @click="getrecommendSongs(i.id)" :src="i.coverImgUrl" >
-    			<p>{{i.nickname}}</p>
+    			<strong>{{i.name}}</strong>
     		</div>
     	</div>
     </div>
@@ -89,9 +89,9 @@
     		<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 15px;">歌手推荐</h3>
     		<div id="new2" class="nav">
     			<a class="new" href="javascript:;">华语</a>
-    			<a href="javascript:;">欧美</a>
+    			<!-- <a href="javascript:;">欧美</a>
     			<a href="javascript:;">日韩</a>
-    			<a href="javascript:;">组合</a>
+    			<a href="javascript:;">组合</a> -->
     			<a href="#/singers">更多</a>
     		</div>
     		<p></p>
@@ -144,7 +144,8 @@
         ],
         singerImg:[],
         radioStation:[],
-        fullscreenLoading:false
+        fullscreenLoading:false,
+        gedanIndex:0
       }
     },
     methods: {
@@ -155,6 +156,14 @@
         this.axios.get("/top/playlist?limit=5&order=new").then(res => {
           that.img = res.playlists;
         })
+        this.gedanIndex = 0;
+      },
+      getNewSongSheetImg(name, index) {
+        let that = this;
+        this.axios.get("/top/playlist?limit=5&order=new&cat="+name).then(res => {
+          that.img = res.playlists;
+        })
+        this.gedanIndex = index;
       },
       // 获取歌单详细
       getrecommendSongs(id) {
@@ -306,11 +315,13 @@
   }
   .index .recommend .item {
   	width: 19.3%;
+    overflow: hidden;
   }
   .index .recommend .item img {
   	width: 100%;
   	height: 241px;
     border: 1px solid mediumslateblue;
+    transition: .5s;
   }
   .index .recommend .item p {
   	margin-top: 15px;

@@ -40,55 +40,29 @@
     </div>
     <div class="center">
       <ul id="new1">
-      	<li class="new">单曲</li>
-      	<li @click="returnAlbum">专辑</li>
+      	<li @click="returnSinger">单曲</li>
+      	<li @click="returnAlbum" class="new">专辑</li>
       	<li>MV</li>
         <li>简介</li>
       </ul>
-      <br>
-      <el-table
-          v-if="hotSongs !== undefined && hotSongs.length>0"
-          :data="hotSongs.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-          stripe
-          style="width: 100%; min-height: 500px;">
-          <el-table-column
-            label="序号"
-            width="80">
-            <template slot-scope="scope">
-              <span>{{scope.$index+1 + 30*(currentPage-1)}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="歌曲">
-            <template slot-scope="scope">
-              <span @click="getMusicUrl(scope.row.id, [scope.row.name, scope.row.ar[0].name])" class="music_name">{{scope.row.name}}</span>
-              <img @click="getMusicMV(scope.row.mv)" class="music_name" v-if="scope.row.mv != 0" src="../assets/MV.png" alt="">
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="歌手"
-            width="280">
-            <template slot-scope="scope">
-              <span v-for="(i, index) in scope.row.ar" :key="index">{{i.name}} </span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="专辑"
-            width="200"
-            prop="al.name">
-          </el-table-column>
-          <el-table-column
-            label="时长"
-            width="200">
-            <template slot-scope='scope'>
-              <span>{{(scope.row.dt / 1000 / 60).toFixed(2)}}分钟</span>
-            </template>
-          </el-table-column>
-        </el-table>
-        <br>
+      <br><br>
+      <div class="mv">
+        <ul>
+          <li v-for="(i, index) in album" :key="index">
+            <div class="img-p">
+              <div :style="'background: url('+i.artist.picUrl+');'" class="img">
+                <div class="mask">
+                  <img src="../assets/播放.png" alt="">
+                </div>
+              </div>
+            </div>
+            <p>{{i.name}}</p>
+            <p>{{i.artistName}}</p>
+          </li>
+        </ul>
          <div class="block">
             <el-pagination
-              background
+              background=""
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currentPage"
@@ -98,6 +72,8 @@
               :total="total">
             </el-pagination>
           </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -116,7 +92,8 @@
         total: 0,
         hotSongs: '',
         singerDetails: '',
-        code: 200
+        code: 200,
+        album: []
       }
     },
     methods: {
@@ -140,10 +117,10 @@
       },
       async getSingerDetail(id) {
         let music = await this.axios.get('/artists?id='+id);
-        let mv = await this.axios.get('/artists?id='+id);
-        let album = await this.axios.get('/artists?id='+id);
-        let introduction = await this.axios.get('/artists?id='+id);
-        return [music, mv, album, introduction];
+        //let mv = await this.axios.get('/artist/mv?id='+id);
+        let album = await this.axios.get('/artist/album?id='+id);
+        //let introduction = await this.axios.get('/artist/desc?id='+id);
+        return [music, album];
       },
       returnSinger() {
         location.href = '#/singerdetails/'+this.$route.params.id;
@@ -164,10 +141,12 @@
         this.code = res[0].code;
         this.singerDetails = res;
         this.music = res[0];
+        this.album = res[1].hotAlbums;
+        console.log(this.album);
         this.picUrl = this.music.artist.picUrl;
         this.name = this.music.artist.name;
         this.briefDesc = this.music.artist.briefDesc;
-        this.total = this.music.hotSongs.length;
+        this.total = this.album.length;
         this.hotSongs = this.music.hotSongs;
         //console.log(this.singerDetails)
       });
@@ -254,5 +233,68 @@
   	float: left;
   	cursor: pointer;
     font-size: 25px;
+  }
+  .mv ul {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .mv ul li {
+    list-style: none;
+    width: 20%;
+    margin-bottom: 23px;
+  }
+  .mv ul li p:nth-child(2) {
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    color: #333;
+    margin-top: 13px;
+  }
+  .mv ul li p:nth-child(3) {
+    color: #666666;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  .mv ul li p:nth-child(2):hover {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .mv ul li p:nth-child(3):hover {
+    cursor: pointer;
+    color: black;
+  }
+  .mv .mask,
+  .mv .img,
+  .mv .img-p {
+    width: 241px;
+    height: 142px;
+    overflow: hidden;
+    transition: .5s;
+  }
+  .mv .img {
+    background-size: cover !important;
+  }
+  .mv .mask {
+    opacity: 0;
+    background: rgba(0,0,0,.3);
+    transition: .5s;
+  }
+  .mv .mask img {
+    width: 50px;
+    height: 50px;
+    margin-top: 30%;
+    margin-left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .mv ul li .img:hover {
+    transform: scale(1.08);
+    cursor: pointer;
+  }
+  .mv ul li .img:hover .mask {
+    opacity: 1;
   }
 </style>
