@@ -10,19 +10,21 @@
   </div>
   <div v-else class="song-sheet center" v-loading.fullscreen.lock="fullscreenLoading">
     <div class="left">
-      <img :src="recommendSongs.coverImgUrl" alt="">
-      <strong>歌单介绍</strong>
-      <p>暂无介绍</p>
+      <img :src="recommendSongs.album.picUrl" alt="">
+      <strong>专辑介绍</strong>
+      <div class="info">
+        <p>{{recommendSongs.album.description}}</p>
+      </div>
       <div class="down">
-        <span>下载该歌单</span>
+        <span>下载该专辑</span>
       </div>
       <el-divider></el-divider>
     </div>
     <div class="right">
-      <strong>{{recommendSongs.name}} 歌曲列表</strong>
+      <strong>{{recommendSongs.album.name}} 歌曲列表</strong>
       <el-table
-          v-if="recommendSongs.tracks !== undefined && recommendSongs.tracks.length>0"
-          :data="recommendSongs.tracks.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+          v-if="recommendSongs.songs !== undefined && recommendSongs.songs.length>0"
+          :data="recommendSongs.songs.slice((currentPage-1)*pagesize,currentPage*pagesize)"
           stripe
           style="width: 100%; min-height: 500px;">
           <el-table-column
@@ -35,7 +37,7 @@
           <el-table-column
             label="歌曲">
             <template slot-scope="scope">
-              <span @click="getMusicUrl(scope.row.id, [scope.row.name, scope.row.ar[0].name])" class="music_name">{{scope.row.name}}</span>
+              <span @click="getMusicUrl(scope.row.al.id, [scope.row.al.name, scope.row.ar[0].name])" class="music_name">{{scope.row.name}}</span>
               <img @click="getMusicMV(scope.row.mv)" class="music_name" v-if="scope.row.mv != 0" src="../assets/MV.png" alt="">
             </template>
           </el-table-column>
@@ -106,10 +108,10 @@
 
     },
     mounted() {
-      this.axios.get("/playlist/detail?id="+this.$route.params.id).then(res => {
-        this.recommendSongs = res.playlist;
-        this.code = res.code;
-        this.total = res.playlist.tracks.length;
+      this.axios.get("/album?id="+this.$route.params.id).then(res => {
+        this.recommendSongs = res;
+        //this.code = res.code;
+        this.total = res.songs.length;
         setTimeout(() => {
           this.fullscreenLoading = false
         }, 1200)
@@ -142,14 +144,20 @@
     color: #333;
     margin-top: 20px;
   }
-  .left p {
+  .left .info p {
     margin-top: 10px;
     font-size: 16px;
     color: #999;
+    max-width: 295px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 9;
+    -webkit-box-orient: vertical;
   }
   .left .down {
     margin-left: 12.5%;
-    margin-top: 15px;
+    margin-top: 25px;
     height: 25px;
     background: #ffe12c;
     padding: 20px;

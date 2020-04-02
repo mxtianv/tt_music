@@ -12,6 +12,8 @@ import Singers from '../components/Singers.vue'
 import PlayLists from '../components/PlayLists.vue'
 import Error from '../components/Error.vue'
 import Album from '../components/Album.vue'
+import SingerMV from '../components/SingerMV.vue'
+import AlbumDetails from '../components/AlbumDetails.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -75,10 +77,36 @@ const routes = [
     redirect: 'singers'
   },
   {
-    path: '/Album/:id',
+    path: '/error',
+    name: 'Error',
+    component: Error,
+    meta: {title:"出错误了!"}
+  },
+  {
+    path: '/album',
+    redirect: '/error'
+  },
+  {
+    path: '/singermv',
+    redirect: '/error'
+  },
+  {
+    path: '/album/:id',
     name: 'Album',
     component: Album,
     meta: {title:"歌手专辑"}
+  },
+  {
+    path: '/albumdetails/:id',
+    name: 'AlbumDetails',
+    component: AlbumDetails,
+    meta: {title:"专辑详细"}
+  },
+  {
+    path: '/singermv/:id',
+    name: 'SingerMV',
+    component: SingerMV,
+    meta: {title:"歌手MV"}
   },
   {
     path: '/singerdetails/:id',

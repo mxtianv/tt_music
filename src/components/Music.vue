@@ -12,10 +12,10 @@
       <h3 style="font-size: 28px;font-weight: 600;margin-bottom: 30px;display: inline-block;">搜索结果</h3>
       <div id="new3" class="nav">
       	<a class="new" href="javascript:;">单曲</a>
-      	<a href="javascript:;">专辑</a>
+      	<!-- <a href="javascript:;">专辑</a>
       	<a href="javascript:;">MV</a>
       	<a href="javascript:;">歌单</a>
-      	<a href="javascript:;">歌手</a>
+      	<a href="javascript:;">歌手</a> -->
       </div>
       <el-table
           :data="musicList.songs"

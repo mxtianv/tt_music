@@ -8,15 +8,15 @@
       </div>
     </router-link>
   </div>
-  <div v-else class="singer-details">
+  <div v-else class="singer-details" v-loading.fullscreen.lock="fullscreenLoading">
     <ul id="new1">
     	<router-link to="/">
         <li>推荐</li>
       </router-link>
-    	<router-link to="rankList">
+    	<router-link to="/rankList">
         <li>排行榜</li>
       </router-link>
-    	<router-link to="singers">
+    	<router-link to="/singers">
         <li class="new">歌手</li>
       </router-link>
     	<router-link to="/songsheet">
@@ -42,7 +42,7 @@
       <ul id="new1">
       	<li class="new">单曲</li>
       	<li @click="returnAlbum">专辑</li>
-      	<li>MV</li>
+      	<li @click="returnSingerMV">MV</li>
         <li>简介</li>
       </ul>
       <br>
@@ -116,7 +116,8 @@
         total: 0,
         hotSongs: '',
         singerDetails: '',
-        code: 200
+        code: 200,
+        fullscreenLoading:true
       }
     },
     methods: {
@@ -140,10 +141,10 @@
       },
       async getSingerDetail(id) {
         let music = await this.axios.get('/artists?id='+id);
-        let mv = await this.axios.get('/artists?id='+id);
-        let album = await this.axios.get('/artists?id='+id);
-        let introduction = await this.axios.get('/artists?id='+id);
-        return [music, mv, album, introduction];
+        //let mv = await this.axios.get('/artists?id='+id);
+        //let album = await this.axios.get('/artists?id='+id);
+        //let introduction = await this.axios.get('/artists?id='+id);
+        return [music];
       },
       returnSinger() {
         location.href = '#/singerdetails/'+this.$route.params.id;
@@ -161,7 +162,7 @@
     mounted() {
       //console.log(this.$route.params.id)
       this.getSingerDetail(this.$route.params.id).then(res => {
-        this.code = res[0].code;
+        //this.code = res[0].code;
         this.singerDetails = res;
         this.music = res[0];
         this.picUrl = this.music.artist.picUrl;
@@ -169,9 +170,18 @@
         this.briefDesc = this.music.artist.briefDesc;
         this.total = this.music.hotSongs.length;
         this.hotSongs = this.music.hotSongs;
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 1000)
         //console.log(this.singerDetails)
+      }, err => {
+        this.code = 404;
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 1000)
       });
       //console.log(this.music)
+      window.scrollTo(0, 0)
     },
     computed: {
       ...mapState([''])

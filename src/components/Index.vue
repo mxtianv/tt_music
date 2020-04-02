@@ -4,10 +4,10 @@
     	<router-link to="/">
         <li class="new">推荐</li>
       </router-link>
-    	<router-link to="rankList">
+    	<router-link to="/rankList">
         <li>排行榜</li>
       </router-link>
-    	<router-link to="singers">
+    	<router-link to="/singers">
         <li>歌手</li>
       </router-link>
     	<router-link to="/songsheet">
@@ -23,7 +23,7 @@
         <img :src="i.imageUrl" alt="">
       </el-carousel-item>
     </el-carousel>
-    <div class="recommend">
+    <div class="recommend" v-loading.fullscreen.lock="fullscreenLoading">
     	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 10px;">推荐歌单</h3>
     	<div id="new2" class="nav">
     		<a :class="{new: gedanIndex == 0}" @click="getSongSheetImg" href="javascript:;">每日推荐</a>
@@ -145,7 +145,7 @@
         singerImg:[],
         radioStation:[],
         fullscreenLoading:false,
-        gedanIndex:0
+        gedanIndex:0,
       }
     },
     methods: {
@@ -160,8 +160,12 @@
       },
       getNewSongSheetImg(name, index) {
         let that = this;
+        that.fullscreenLoading = true;
         this.axios.get("/top/playlist?limit=5&order=new&cat="+name).then(res => {
           that.img = res.playlists;
+          that.fullscreenLoading = false;
+        }, err => {
+          that.fullscreenLoading = false;
         })
         this.gedanIndex = index;
       },

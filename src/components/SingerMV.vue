@@ -41,23 +41,23 @@
     <div class="center">
       <ul id="new1">
       	<li @click="returnSinger">单曲</li>
-      	<li @click="returnAlbum" class="new">专辑</li>
-      	<li @click="returnSingerMV">MV</li>
+      	<li @click="returnAlbum">专辑</li>
+      	<li @click="returnSingerMV" class="new">MV</li>
         <li>简介</li>
       </ul>
       <br><br>
       <div class="mv">
         <ul>
-          <li v-for="(i, index) in album" :key="index">
-            <div @click="goAlbum(i.id)" class="img-p">
-              <div :style="'background: url('+i.blurPicUrl+');'" class="img">
+          <li v-for="(i, index) in mv" :key="index">
+            <div class="img-p">
+              <div @click="getMusicMV(i.id)" :style="'background: url('+i.imgurl+');'" class="img">
                 <div class="mask">
                   <img src="../assets/播放.png" alt="">
                 </div>
               </div>
             </div>
             <p>{{i.name}}</p>
-            <!-- <p>{{i.artistName}}</p> -->
+            <p>{{i.artistName}}</p>
           </li>
         </ul>
          <div class="block">
@@ -93,7 +93,7 @@
         hotSongs: '',
         singerDetails: '',
         code: 200,
-        album: [],
+        mv: [],
         fullscreenLoading: true
       }
     },
@@ -120,21 +120,18 @@
       async getSingerDetail(id) {
         let music = await this.axios.get('/artists?id='+id);
         //let mv = await this.axios.get('/artist/mv?id='+id);
-        let album = await this.axios.get('/artist/album?limit=300&id='+id);
+        let mv = await this.axios.get('/artist/mv?limit=300&id='+id);
         //let introduction = await this.axios.get('/artist/desc?id='+id);
-        return [music, album];
+        return [music, mv];
       },
       getAlbum(page) {
         let that = this;
-        this.axios.get('/artist/album?id='+this.$route.params.id+'&limit=28&offset='+(page-1)*28).then(res => {
-          that.album = res.hotAlbums;
+        this.axios.get('/artist/mv?id='+this.$route.params.id+'&limit=28&offset='+(page-1)*28).then(res => {
+          that.mv = res.mvs;
         })
         setTimeout(() => {
           this.fullscreenLoading = false;
         }, 1000)
-      },
-      goAlbum(id) {
-        location.href = '#/AlbumDetails/'+id;
       },
       returnSinger() {
         location.href = '#/singerdetails/'+this.$route.params.id;
@@ -161,13 +158,13 @@
         that.picUrl = that.music.artist.picUrl;
         that.name = that.music.artist.name;
         that.briefDesc = that.music.artist.briefDesc;
-        that.total = res[1].hotAlbums.length;
+        that.total = res[1].mvs.length;
         that.hotSongs = that.music.hotSongs;
         //console.log(this.singerDetails)
       }, err => {
         that.code = 404;
         setTimeout(() => {
-          that.fullscreenLoading = false;
+          this.fullscreenLoading = false;
         }, 1000)
       });
       window.scrollTo(0, 0)

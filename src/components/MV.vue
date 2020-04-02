@@ -4,10 +4,10 @@
     	<router-link to="/">
         <li>推荐</li>
       </router-link>
-    	<router-link to="rankList">
+    	<router-link to="/rankList">
         <li>排行榜</li>
       </router-link>
-    	<router-link to="singers">
+    	<router-link to="/singers">
         <li>歌手</li>
       </router-link>
     	<router-link to="/songsheet">
@@ -21,7 +21,7 @@
     <!-- 播放MV -->
     <div style="padding-bottom: 20px;" class="musicMv">
     	<div ref='video' class="video_con">
-    		<video ref='video' :src="MV" controls="controls"></video>
+    		<video style="max-height: 1216px;" ref='video' :src="MV" controls="controls"></video>
         <span>{{MVinfo.name}} - {{MVinfo.artistName}}</span>
         <!--  -->
         <p>{{MVinfo.briefDesc}}</p>

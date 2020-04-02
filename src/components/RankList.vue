@@ -4,10 +4,10 @@
     	<router-link to="/">
         <li>推荐</li>
       </router-link>
-    	<router-link to="rankList">
+    	<router-link to="/rankList">
         <li  class="new">排行榜</li>
       </router-link>
-    	<router-link to="singers">
+    	<router-link to="/singers">
         <li>歌手</li>
       </router-link>
     	<router-link to="/songsheet">

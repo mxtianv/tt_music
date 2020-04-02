@@ -254,7 +254,7 @@
     watch: {
       music(val) {
         this.n = 1;
-        //console.log(this.n)
+        //console.log(val)
       }
     }
   }
@@ -272,6 +272,9 @@
   }
   a:hover{
   	text-decoration: none;
+  }
+  .music_name:hover {
+    color: #00BFFF;
   }
   .music-play i {
     position: absolute;
