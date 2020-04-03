@@ -50,7 +50,7 @@
             label="时长"
             width="150">
             <template slot-scope='scope'>
-              <span>{{(scope.row.dt / 1000 / 60).toFixed(2)}}分钟</span>
+              <span>{{Math.floor((scope.row.dt/1000/60))}}:{{Math.floor((scope.row.dt/1000) % 60)}}</span>
             </template>
           </el-table-column>
         </el-table>

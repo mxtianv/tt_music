@@ -15,10 +15,11 @@ export default new Vuex.Store({
   },
   mutations: {
     playMusic(state, url) {
-      state.music = url;
       if (url == null) {
-       //alert('没有找到该歌曲');
        state.musicSign++
+      }
+      else {
+        state.music = url;
       }
     },
     playMusicInfo(state, info) {

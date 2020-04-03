@@ -36,7 +36,7 @@
       <router-view></router-view>
     </div>
     <!-- 音乐播放器 -->
-    <div class="music-play" style="position: fixed;bottom: 0;width: 90%;left: 5%;mix-width: 100px;mix-height: 100px;" v-if="music != 0">
+    <div class="music-play" style="background: #F0F0F0;position: fixed;bottom: 0;width: 90%;left: 5%;mix-width: 100px;mix-height: 100px;" v-if="music != 0">
       <i  @click="showM" class="el-icon-service"></i>
       <!-- <i v-if="n != 1" @click="showM" style="margin-left: 97%;background: mediumslateblue;padding: 5px;display: inline-block;" class="el-icon-lock"></i> -->
     	<div v-show="n == 1" class="audio_con">
