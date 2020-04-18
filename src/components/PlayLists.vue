@@ -81,6 +81,7 @@
             break;
           }
         }
+        this.currentPage = val;
         window.scrollTo(0, 0);
       },
       getgdList(str) {
@@ -103,6 +104,7 @@
             this.fullscreenLoading = false;
           }, 900)
         })
+        this.currentPage = 1;
       },
      moreInfo(id) {
         location.href = '#/songsheet/'+id;

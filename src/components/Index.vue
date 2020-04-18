@@ -144,7 +144,7 @@
         ],
         singerImg:[],
         radioStation:[],
-        fullscreenLoading:false,
+        fullscreenLoading:true,
         gedanIndex:0,
       }
     },
@@ -245,6 +245,9 @@
         //this.bang = data;
         this.getMusicBang(data)
         //console.log(this.bang)
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 600)
       });
       this.getSingerImg();
       this.getRadioStation();

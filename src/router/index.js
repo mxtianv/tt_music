@@ -1,20 +1,21 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Index from '../components/Index.vue'
-import Music from '../components/Music.vue'
-import MV from '../components/MV.vue'
-import SongSheet from '../components/SongSheet.vue'
-import SingerDetails from '../components/SingerDetails.vue'
-import HotMV from '../components/HotMV.vue'
-import RankList from '../components/RankList.vue'
-import Singers from '../components/Singers.vue'
-import PlayLists from '../components/PlayLists.vue'
-import Error from '../components/Error.vue'
-import Album from '../components/Album.vue'
-import SingerMV from '../components/SingerMV.vue'
-import AlbumDetails from '../components/AlbumDetails.vue'
-import BriefIntr from '../components/BriefIntr.vue'
+
+const Index = () => import('../components/Index.vue')
+const Music = () => import('../components/Music.vue')
+const MV = () => import('../components/MV.vue')
+const SongSheet = () => import('../components/SongSheet.vue')
+const SingerDetails = () => import('../components/SingerDetails.vue')
+const HotMV = () => import('../components/HotMV.vue')
+const RankList = () => import('../components/RankList.vue')
+const Singers = () => import('../components/Singers.vue')
+const PlayLists = () => import('../components/PlayLists.vue')
+const Error = () => import('../components/Error.vue')
+const Album = () => import('../components/Album.vue')
+const SingerMV = () => import('../components/SingerMV.vue')
+const AlbumDetails = () => import('../components/AlbumDetails.vue')
+const BriefIntr = () => import('../components/BriefIntr.vue')
 Vue.use(VueRouter)
 
 const routes = [
@@ -23,6 +24,10 @@ const routes = [
     name: 'Index',
     component: Index,
     meta: {title:"听听音乐"}
+  },
+  {
+    path: '*',
+    redirect: '/error',
   },
   {
     path: '/music',

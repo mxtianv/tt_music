@@ -251,6 +251,14 @@
       		scrollTop: 0
       	});
       });
+      try {
+      var urlhash = window.location.hash;
+      if (!urlhash.match("fromapp")) {
+      if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i))) {
+      window.location = "http://muxiaotian.cn:83/";
+      }
+      }
+      } catch (err) {}
     },
     watch: {
       music(val) {
@@ -258,11 +266,10 @@
         //console.log(val)
       },
       musicSign(val) {
-        this.$message.error('没有找到该歌曲');
+        this.$message.error('该歌曲为付费音乐,请先登录。');
       }
     }
   }
-
 </script>
 <style>
   *{

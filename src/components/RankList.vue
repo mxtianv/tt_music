@@ -166,6 +166,7 @@
           this.total = res.playlist.tracks.length;
           this.newIndex = id;
           this.fullscreenLoading = false;
+					this.currentPage = 1;
         })
       },
       getSinger(id) {
@@ -177,7 +178,8 @@
     },
     mounted() {
       this.getMusicList(0);
-      window.scrollTo(0, 0)
+      window.scrollTo(0, 0);
+      //console.log(this.$route.query.id)
     }
   }
 </script>

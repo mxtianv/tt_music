@@ -60,7 +60,7 @@
             <strong>{{i.ti}}</strong>
           </div>
           <div class="con">
-            <pre v-html="i.txt"></pre>
+            <p v-html="i.txt"></p>
           </div>
         </div>
       </div>
@@ -155,6 +155,9 @@
 </script>
 
 <style scoped="scoped">
+  .con p {
+    white-space: pre-line;
+  }
   .singer-details ul {
   	margin-left: 15%;
     margin-top: 20px;
@@ -240,7 +243,7 @@
   }
   .con {
     line-height: 25px;
-    font-size: 14px;
+    font-size: 15px;
     color: #666666;
   }
 </style>

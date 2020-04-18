@@ -7,7 +7,7 @@
     	<router-link to="/rankList">
         <li>排行榜</li>
       </router-link>
-    	<router-link to="/singers">
+		<router-link to="/singers">
         <li>歌手</li>
       </router-link>
     	<router-link to="/songsheet">
@@ -90,6 +90,7 @@
             break;
           }
         }
+        this.currentPage = val;
         window.scrollTo(0, 0);
       },
       getMVList() {
@@ -115,6 +116,8 @@
       },
       // MV分类
       getMv(name) {
+        this.currentPage = 1;
+        //console.log(this.currentPage);
         let that = this;
         this.fullscreenLoading = true;
         this.MVList = [];
@@ -157,6 +160,7 @@
             this.newMVList = res.data
           }
         })
+        this.currentPage = 1;
         setTimeout(() => {
           this.fullscreenLoading = false;
         }, 900)
