@@ -12,7 +12,8 @@
     <div class="left">
       <img :src="recommendSongs.coverImgUrl" alt="">
       <strong>歌单介绍</strong>
-      <p>暂无介绍</p>
+      <p v-if="recommendSongs.description != null">{{recommendSongs.description}}</p>
+      <p v-else>暂无介绍</p>
       <div class="down">
         <span>下载该歌单</span>
       </div>
@@ -151,6 +152,7 @@
     margin-top: 10px;
     font-size: 16px;
     color: #999;
+    width: 295px;
   }
   .left .down {
     margin-left: 12.5%;
