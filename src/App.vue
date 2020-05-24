@@ -24,7 +24,12 @@
       	</ul>
       	<div class="right">
           <i style="position: relative;left: 25px;color: #666;" class="el-icon-search"></i>
-      		<input @keyup.enter="musicList" v-model="keyword" type="text" class="search" placeholder="请输入你想听的音乐">
+      		<input @blur="closeSearchSuggestions" @focus="searchSuggestionsShow = true" @keyup="searchSuggestions" @keyup.enter="musicList" v-model="keyword" type="text" class="search" placeholder="请输入你想听的音乐">
+          <ul v-if="searchSuggestionsShow && keyword != ''">
+            <li @click="gomusicList(i.keyword)" v-for="(i, index) in searchSuggestionsList" :key="index">
+              {{i.keyword}}
+            </li>
+          </ul>
       		<span @click="loginT">登录</span>
           <span>/</span>
           <span @click="registerT">注册</span>
@@ -167,7 +172,9 @@
         comPassword: '',
         title: '登录',
         n:1,
-        bf: true
+        bf: true,
+				searchSuggestionsList:[],
+        searchSuggestionsShow: false
       }
     },
     methods: {
@@ -234,6 +241,21 @@
         else {
           this.n = 1;
         }
+      },
+			searchSuggestions() {
+        if (this.keyword != '') {
+          this.axios.get('/search/suggest?keywords='+this.keyword+'&type=mobile').then(res => {
+            this.searchSuggestionsList = res.result.allMatch;
+          })
+        }
+			},
+      gomusicList(keyword) {
+        this.$router.push("/music/" + keyword)
+      },
+      closeSearchSuggestions() {
+        setTimeout(() => {
+          this.searchSuggestionsShow = false;
+        }, 100)
       }
     },
     computed: {
@@ -283,6 +305,33 @@
   }
   a:hover{
   	text-decoration: none;
+  }
+  .header .center .right {
+    position: relative;
+  }
+  .header .center .right ul {
+    position: absolute;
+    z-index: 999;
+    width: 280px;
+    background: white;
+    top: 60px;
+    left: 0;
+  }
+  .header .center .right ul li:first-child {
+    margin-top: 18px;
+  }
+  .header .center .right ul li:last-child {
+    margin-bottom: 18px;
+  }
+  .header .center .right ul li {
+    padding: 20px;
+    width: 100%;
+    height: 0px;
+    line-height: 0;
+    outline: none;
+  }
+  .header .center .right ul li:hover {
+    background: #f5f5f5;
   }
   .singer .info p:nth-child(2) {
     font-size: 19px;

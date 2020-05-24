@@ -64,9 +64,9 @@
     	<p></p>
       <div class="Bang">
         <div class="bang" v-for="(i, index) in bang" :key="index">
-          <div class="top" :style="'background: url('+i.creator.backgroundUrl+')'">
+          <div class="top" :style="'background: url('+i.coverImgUrl+')'">
             <div class="top_bg">
-              <img :src="bangImg2[index].img" >
+              <img :src="i.coverImgUrl" >
             </div>
           </div>
           <ul>
@@ -186,11 +186,11 @@
       },
       // 获取音乐排行榜
       async getBang() {
-        let music1 = await this.axios.get('/top/list?idx=0')
-        let music2 = await this.axios.get('/top/list?idx=1')
-        let music3 = await this.axios.get('/top/list?idx=2')
-        let music4 = await this.axios.get('/top/list?idx=3')
-        let music5 = await this.axios.get('/top/list?idx=4')
+        let music1 = await this.axios.get('/top/list?idx=1')
+        let music2 = await this.axios.get('/top/list?idx=0')
+        let music3 = await this.axios.get('/top/list?idx=3')
+        let music4 = await this.axios.get('/top/list?idx=14')
+        let music5 = await this.axios.get('/top/list?idx=26')
         return [music1.playlist,
                 music2.playlist,
                 music3.playlist,
@@ -248,6 +248,8 @@
         setTimeout(() => {
           this.fullscreenLoading = false;
         }, 600)
+      }, err => {
+        this.fullscreenLoading = false;
       });
       this.getSingerImg();
       this.getRadioStation();
@@ -382,12 +384,15 @@
   .ranking .bang .title {
   	display: inline-block;
   }
+  .ranking .bang ul li:first-child {
+  	margin: 0;
+  }
   .ranking .bang ul li {
   	margin: 0;
   	margin-top: 18px;
   }
   .ranking .bang ul li:last-child {
-    margin-bottom: 18px;
+    margin-bottom: 28px;
   }
   .ranking .bang .music_name {
   	display: inline-block;
@@ -414,13 +419,12 @@
   }
   .ranking .bang .top {
   	height: 160px;
-  	background: red;
+    background-size: cover;
   }
   .ranking .bang .top img {
-  	width: 130px;
-  	height: 70px;
-  	margin-left: 23%;
-  	margin-top: 15%;
+  	width: 100%;
+  	height: 100%;
+
   }
   .ranking .bang .top_bg {
   	height: 160px;
