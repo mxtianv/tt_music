@@ -63,12 +63,12 @@
     			<p>下载客户端</p>
     			<br>
     				<span>
-    					<a href="#">Windows端</a>
-    					<a href="#">Mac端</a>
+    					<a href="javascript:;">Windows端</a>
+    					<a href="javascript:;">Mac端</a>
     				</span>
     				<span>
-    					<a href="#">安卓端</a>
-    					<a href="#">苹果端</a>
+    					<a href="javascript:;">安卓端</a>
+    					<a href="javascript:;">苹果端</a>
     				</span>
 
     		</div>
@@ -77,12 +77,12 @@
     			<br>
 
     				<span>
-    					<a href="#">用户服务协议</a>
-    					<a href="#">用户服务协议</a>
+    					<a href="javascript:;">用户服务协议</a>
+    					<a href="javascript:;">用户服务协议</a>
     				</span>
     				<span>
-    					<a href="#">用户服务协议</a>
-    					<a href="#">用户服务协议</a>
+    					<a href="javascript:;">用户服务协议</a>
+    					<a href="javascript:;">用户服务协议</a>
     				</span>
 
     		</div>
@@ -90,13 +90,13 @@
     			<p>其他</p>
     			<br>
     				<span>
-    					<a href="#">联系我们</a>
-    					<a href="#">听听音乐</a>
-    					<a href="#">诚聘英才</a>
+    					<a href="javascript:;">联系我们</a>
+    					<a href="javascript:;">听听音乐</a>
+    					<a href="javascript:;">诚聘英才</a>
     				</span>
     				<span>
-    					<a href="#">广告服务</a>
-    					<a href="#">未成年人家长监护工程</a>
+    					<a href="javascript:;">广告服务</a>
+    					<a href="javascript:;">未成年人家长监护工程</a>
     				</span>
 
     		</div>
@@ -104,7 +104,7 @@
     </div>
     <div class="footer2">
     	<br>
-    	<p>356科技有限公司版权所有 丨 网络文化经营许可证：京网文[xxxx]xxx-xxx号  丨 增值电信业务经营许可证xx-xxxxx 丨 京ICP证xxxxxx号</p>
+    	<p>木小天网络有限公司版权所有 丨 网络文化经营许可证：京网文[xxxx]xxx-xxx号  丨 增值电信业务经营许可证xx-xxxxx 丨 京ICP证xxxxxx号</p>
     	<p>根据酷我音乐官网样式制作 丨 根据酷我音乐官网样式制作 丨 根据酷我音乐官网样式制作</p>
     	<p>举报电话：xxx-xxxxxxx 丨 举报邮箱：xxx@xx.cn</p>
     </div>
@@ -255,7 +255,7 @@
       closeSearchSuggestions() {
         setTimeout(() => {
           this.searchSuggestionsShow = false;
-        }, 100)
+        }, 320)
       }
     },
     computed: {
