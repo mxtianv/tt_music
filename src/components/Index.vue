@@ -390,6 +390,8 @@
   .ranking .bang ul li {
   	margin: 0;
   	margin-top: 18px;
+    display: flex;
+    align-items: center;
   }
   .ranking .bang ul li:last-child {
     margin-bottom: 28px;
@@ -416,6 +418,7 @@
   }
   .ranking .bang .title span:hover{
   	font-weight: 600;
+    color: black;
   }
   .ranking .bang .top {
   	height: 160px;
@@ -458,7 +461,7 @@
   	display: inline-block;
   	margin-left: 20px;
   	padding: 18px;
-  	width: 13%;
+  	
   	background: #ffdf1f;
   	border-radius: 20px;
   	line-height: 0px;
@@ -483,6 +486,7 @@
   	width: 30%;
   	height: 100px;
   	margin-top: 20px;
+    display: flex;
   }
   .anchorStation .content .list .list_img {
   	float: left;

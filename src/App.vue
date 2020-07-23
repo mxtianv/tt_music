@@ -230,7 +230,7 @@
           } else if (this.password != this.comPassword){
             this.$message.error('两次输入密码不一致');
           }else {
-            this.$message.error('注册系统暂未开放！');
+            this.$message.error('注册系统已关闭！');
           }
         }
       },
@@ -277,7 +277,7 @@
       var urlhash = window.location.hash;
       if (!urlhash.match("fromapp")) {
       if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i))) {
-      window.location = "http://muxiaotian.cn:83/";
+      window.location = "http://mxtian.cn:83/";
       }
       }
       } catch (err) {}
@@ -365,8 +365,8 @@
     margin: auto;
   }
   .login img {
-    width: 278px;
-    height: 114px;
+    width: 100%;
+    width: 100%;
   }
   .login .el-input {
     margin-bottom: 15px;
@@ -506,7 +506,7 @@
   	background: white;
   	height: 80px;
   	line-height: 80px;
-  	padding: 0 17px;
+  	padding: 0 13px;
   	cursor: pointer;
   }
   .header #find {
@@ -519,7 +519,7 @@
   }
   .header .right input {
   	height: 35px;
-  	width: 280px;
+  	width: 240px;
   	padding: 6px;
   	background: #f5f5f5;
   	border: none;
