@@ -43,6 +43,7 @@
     data() {
       return {
         singerImg: [],
+        allSingerImg: [],
         newSingerImg: [],
         fullscreenLoading: true
       }
@@ -55,23 +56,36 @@
           location.href = '#/singerdetails/'+id;
         }, 0)
       },
-      getSingers(val) {
+      getSingers() {
         this.fullscreenLoading = true;
         let that = this;
-        this.axios.get("/top/artists?offset="+(val - 1)*30+"&limit=30").then(res => {
-          that.singerImg = res.artists;
+        this.axios.get("/top/artists").then(res => {
+          that.allSingerImg = res.artists;
+          for (var i = 0 * 30; i < 30; i++) {
+            this.singerImg.push(that.allSingerImg[i]);
+          }
         })
         setTimeout(() => {
           this.fullscreenLoading = false;
         }, 1000)
       },
+      getSingersPage(val) {
+        this.fullscreenLoading = true;
+        this.singerImg = [];
+        for (var i = (val - 1) * 30; i < 30 * val; i++) {
+          this.singerImg.push(this.allSingerImg[i]);
+        }
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 1000)
+      },
       handleCurrentChange(val) {
-        this.getSingers(val);
+        this.getSingersPage(val);
         window.scrollTo(0, 0);
       }
     },
     mounted() {
-      this.getSingers(1)
+      this.getSingers();
     }
   }
 </script>
