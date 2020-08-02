@@ -7,7 +7,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 
-axios.defaults.baseURL = 'http://muxiaotian.cn:100'
+axios.defaults.baseURL = 'http://mxtian.cn:100'
 axios.interceptors.response.use(data => {
   return data.data
 })

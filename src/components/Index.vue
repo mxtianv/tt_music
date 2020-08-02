@@ -202,7 +202,9 @@
       getSingerImg() {
         let that = this;
         this.axios.get("/top/artists?offset=0&limit=6").then(res => {
-          that.singerImg = res.artists;
+          for (var i = 0; i < 6; i++) {
+            that.singerImg.push(res.artists[i])
+          }
         })
       },
       // 推荐电台
