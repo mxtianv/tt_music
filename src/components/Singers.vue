@@ -72,9 +72,12 @@
       getSingersPage(val) {
         this.fullscreenLoading = true;
         this.singerImg = [];
-        for (var i = (val - 1) * 30; i < 30 * val; i++) {
-          this.singerImg.push(this.allSingerImg[i]);
-        }
+        // for (var i = (val - 1) * 30; i < 30 * val; i++) {
+        //   this.singerImg.push(this.allSingerImg[i]);
+        // }
+        this.axios.get(`/top/artists?offset=${(val-1)*30}&limit=30`).then(res => {
+          this.singerImg = res.artists;
+        })
         setTimeout(() => {
           this.fullscreenLoading = false;
         }, 1000)
