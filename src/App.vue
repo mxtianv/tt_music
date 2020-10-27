@@ -303,6 +303,11 @@
     color: black;
     text-decoration: none;
   }
+  #app {
+    max-width: 1650px;
+    min-height: 1200px;
+    margin: 0 auto;
+  }
   a:hover{
   	text-decoration: none;
   }

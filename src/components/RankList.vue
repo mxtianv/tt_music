@@ -1,5 +1,5 @@
 <template>
-  <div class="rank-list" v-loading.fullscreen.lock="fullscreenLoading">>
+  <div class="rank-list" v-loading.fullscreen.lock="fullscreenLoading">
     <ul id="new1">
     	<router-link to="/">
         <li>推荐</li>
