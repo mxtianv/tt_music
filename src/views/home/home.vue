@@ -138,7 +138,7 @@
           <button v-if="title == '注册'" @click="comBtn(0)">{{title}}</button>
         </div>
         <el-divider v-if="title == '登录'">
-          <span>其他账户登录</span>
+          <span style="margin-top: 20px;">其他账户登录</span>
         </el-divider>
         <el-divider v-if="title == '注册'">
           <a style="color: #00BFFF;" href="javascript:;" @click="tologin">已有账号?立即登录</a>
@@ -294,23 +294,6 @@
   }
 </script>
 <style scoped="scoped">
-  *{
-  	margin: 0;
-  	padding: 0;
-    box-sizing: border-box;
-  }
-  a {
-    color: black;
-    text-decoration: none;
-  }
-  #app {
-    max-width: 1650px;
-    min-height: 1200px;
-    margin: 0 auto;
-  }
-  a:hover{
-  	text-decoration: none;
-  }
   .header .center .right {
     position: relative;
   }
