@@ -1,6 +1,6 @@
 <template>
   <div v-if="code == 404" class="err">
-    <img src="../assets/err.png" alt="">
+    <img src="../../../assets/err.png" alt="">
     <p>抱歉，暂无相关数据，重新刷新页面试试吧</p>
     <router-link to="/">
       <div class="fhindex">
@@ -42,28 +42,38 @@
       <ul id="new1">
       	<li @click="returnSinger">单曲</li>
       	<li @click="returnAlbum">专辑</li>
-      	<li @click="returnSingerMV">MV</li>
-        <li @click="returnSingerInfo" class="new">简介</li>
+      	<li @click="returnSingerMV" class="new">MV</li>
+        <li @click="returnSingerInfo">简介</li>
       </ul>
       <br><br>
-      <div class="info">
-        <div class="title">
-          <strong>简介</strong>
-        </div>
-        <div class="con">
-          {{briefintr.briefDesc}}
-        </div>
-      </div>
-      <div class="content" v-for="(i, index) in briefintr.introduction" :key="index">
-        <div class="info">
-          <div class="title">
-            <strong>{{i.ti}}</strong>
+      <div class="mv">
+        <ul>
+          <li v-for="(i, index) in mv" :key="index">
+            <div class="img-p">
+              <div @click="getMusicMV(i.id)" :style="'background: url('+i.imgurl+');'" class="img">
+                <div class="mask">
+                  <img src="../../../assets/播放.png" alt="">
+                </div>
+              </div>
+            </div>
+            <p>{{i.name}}</p>
+            <p>{{i.artistName}}</p>
+          </li>
+        </ul>
+         <div class="block">
+            <el-pagination
+              background=""
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[28]"
+              :page-size="100"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
+            </el-pagination>
           </div>
-          <div class="con">
-            <p v-html="i.txt"></p>
-          </div>
-        </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -83,9 +93,8 @@
         hotSongs: '',
         singerDetails: '',
         code: 200,
-        album: [],
-        fullscreenLoading: true,
-        briefintr: []
+        mv: [],
+        fullscreenLoading: true
       }
     },
     methods: {
@@ -111,9 +120,18 @@
       async getSingerDetail(id) {
         let music = await this.axios.get('/artists?id='+id);
         //let mv = await this.axios.get('/artist/mv?id='+id);
-        let briefIntr = await this.axios.get('/artist/desc?id='+id);
+        let mv = await this.axios.get('/artist/mv?limit=300&id='+id);
         //let introduction = await this.axios.get('/artist/desc?id='+id);
-        return [music, briefIntr];
+        return [music, mv];
+      },
+      getAlbum(page) {
+        let that = this;
+        this.axios.get('/artist/mv?id='+this.$route.params.id+'&limit=28&offset='+(page-1)*28).then(res => {
+          that.mv = res.mvs;
+        })
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 1000)
       },
       returnSinger() {
         location.href = '#/singerdetails/'+this.$route.params.id;
@@ -132,17 +150,21 @@
       let that = this;
       //console.log(this.$route.params.id)
       this.getSingerDetail(this.$route.params.id).then(res => {
+        that.code = res[1].code;
         that.singerDetails = res;
         that.music = res[0];
+        that.getAlbum(1);
+        //console.log(that.code);
         that.picUrl = that.music.artist.picUrl;
         that.name = that.music.artist.name;
         that.briefDesc = that.music.artist.briefDesc;
-        that.briefintr = res[1];
-        that.fullscreenLoading = false
+        that.total = res[1].mvs.length;
+        that.hotSongs = that.music.hotSongs;
+        //console.log(this.singerDetails)
       }, err => {
         that.code = 404;
         setTimeout(() => {
-          that.fullscreenLoading = false;
+          this.fullscreenLoading = false;
         }, 1000)
       });
       window.scrollTo(0, 0)
@@ -155,9 +177,6 @@
 </script>
 
 <style scoped="scoped">
-  .con p {
-    white-space: pre-line;
-  }
   .singer-details ul {
   	margin-left: 15%;
     margin-top: 20px;
@@ -233,17 +252,67 @@
   	cursor: pointer;
     font-size: 25px;
   }
-  .title {
-    font-size: 20px;
-    padding-left: 10px;
-    border-left: 6px solid #F0E423;
-    color: #333;
-    margin-top: 30px;
-    margin-bottom: 30px;
+  .mv ul {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
-  .con {
-    line-height: 25px;
-    font-size: 15px;
+  .mv ul li {
+    list-style: none;
+    width: 20%;
+    margin-bottom: 23px;
+  }
+  .mv ul li p:nth-child(2) {
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    color: #333;
+    margin-top: 13px;
+  }
+  .mv ul li p:nth-child(3) {
     color: #666666;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  .mv ul li p:nth-child(2):hover {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .mv ul li p:nth-child(3):hover {
+    cursor: pointer;
+    color: black;
+  }
+  .mv .mask,
+  .mv .img,
+  .mv .img-p {
+    width: 241px;
+    height: 142px;
+    overflow: hidden;
+    transition: .5s;
+  }
+  .mv .img {
+    background-size: cover !important;
+  }
+  .mv .mask {
+    opacity: 0;
+    background: rgba(0,0,0,.3);
+    transition: .5s;
+  }
+  .mv .mask img {
+    width: 50px;
+    height: 50px;
+    margin-top: 30%;
+    margin-left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .mv ul li .img:hover {
+    transform: scale(1.08);
+    cursor: pointer;
+  }
+  .mv ul li .img:hover .mask {
+    opacity: 1;
   }
 </style>

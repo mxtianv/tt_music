@@ -1,6 +1,6 @@
 <template>
   <div v-if="code == 404" class="err">
-    <img src="../assets/err.png" alt="">
+    <img src="../../../assets/err.png" alt="">
     <p>抱歉，暂无相关数据，重新刷新页面试试吧</p>
     <router-link to="/">
       <div class="fhindex">
@@ -41,23 +41,23 @@
     <div class="center">
       <ul id="new1">
       	<li @click="returnSinger">单曲</li>
-      	<li @click="returnAlbum">专辑</li>
-      	<li @click="returnSingerMV" class="new">MV</li>
+      	<li @click="returnAlbum" class="new">专辑</li>
+      	<li @click="returnSingerMV">MV</li>
         <li @click="returnSingerInfo">简介</li>
       </ul>
       <br><br>
       <div class="mv">
         <ul>
-          <li v-for="(i, index) in mv" :key="index">
-            <div class="img-p">
-              <div @click="getMusicMV(i.id)" :style="'background: url('+i.imgurl+');'" class="img">
+          <li v-for="(i, index) in album" :key="index">
+            <div @click="goAlbum(i.id)" class="img-p">
+              <div :style="'background: url('+i.blurPicUrl+');'" class="img">
                 <div class="mask">
-                  <img src="../assets/播放.png" alt="">
+                  <img src="../../../assets/播放.png" alt="">
                 </div>
               </div>
             </div>
             <p>{{i.name}}</p>
-            <p>{{i.artistName}}</p>
+            <!-- <p>{{i.artistName}}</p> -->
           </li>
         </ul>
          <div class="block">
@@ -93,7 +93,7 @@
         hotSongs: '',
         singerDetails: '',
         code: 200,
-        mv: [],
+        album: [],
         fullscreenLoading: true
       }
     },
@@ -120,18 +120,21 @@
       async getSingerDetail(id) {
         let music = await this.axios.get('/artists?id='+id);
         //let mv = await this.axios.get('/artist/mv?id='+id);
-        let mv = await this.axios.get('/artist/mv?limit=300&id='+id);
+        let album = await this.axios.get('/artist/album?limit=300&id='+id);
         //let introduction = await this.axios.get('/artist/desc?id='+id);
-        return [music, mv];
+        return [music, album];
       },
       getAlbum(page) {
         let that = this;
-        this.axios.get('/artist/mv?id='+this.$route.params.id+'&limit=28&offset='+(page-1)*28).then(res => {
-          that.mv = res.mvs;
+        this.axios.get('/artist/album?id='+this.$route.params.id+'&limit=28&offset='+(page-1)*28).then(res => {
+          that.album = res.hotAlbums;
         })
         setTimeout(() => {
           this.fullscreenLoading = false;
         }, 1000)
+      },
+      goAlbum(id) {
+        location.href = '#/albumdetails/'+id;
       },
       returnSinger() {
         location.href = '#/singerdetails/'+this.$route.params.id;
@@ -158,13 +161,14 @@
         that.picUrl = that.music.artist.picUrl;
         that.name = that.music.artist.name;
         that.briefDesc = that.music.artist.briefDesc;
-        that.total = res[1].mvs.length;
+        that.total = res[1].hotAlbums.length;
         that.hotSongs = that.music.hotSongs;
+        that.fullscreenLoading = false;
         //console.log(this.singerDetails)
       }, err => {
         that.code = 404;
         setTimeout(() => {
-          this.fullscreenLoading = false;
+          that.fullscreenLoading = false;
         }, 1000)
       });
       window.scrollTo(0, 0)

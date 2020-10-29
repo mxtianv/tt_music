@@ -46,10 +46,10 @@
     	<h3 style="font-size: 28px;font-weight: 600;margin-bottom: 25px;">精彩活动</h3>
     	<div id="img">
     		<div class="img1">
-    			<img src="../assets/activity1.jpg" >
+    			<img src="../../assets/activity1.jpg" >
     		</div>
     		<div class="img1">
-    			<img src="../assets/activity2.jpg" >
+    			<img src="../../assets/activity2.jpg" >
     		</div>
     	</div>
     </div>
@@ -136,11 +136,11 @@
         banner: [],
         bangImg1:[],
         bangImg2:[
-          {'img': require('../assets/p1.png')},
-          {'img': require('../assets/p2.png')},
-          {'img': require('../assets/p3.png')},
-          {'img': require('../assets/p4.png')},
-          {'img': require('../assets/p5.png')}
+          {'img': require('../../assets/p1.png')},
+          {'img': require('../../assets/p2.png')},
+          {'img': require('../../assets/p3.png')},
+          {'img': require('../../assets/p4.png')},
+          {'img': require('../../assets/p5.png')}
         ],
         singerImg:[],
         radioStation:[],

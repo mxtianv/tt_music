@@ -1,5 +1,5 @@
 <template>
-  <div class="playlists center" v-loading.fullscreen.lock="fullscreenLoading">
+  <div class="hotmv center">
     <ul id="new1">
     	<router-link to="/">
         <li>推荐</li>
@@ -7,34 +7,43 @@
     	<router-link to="/rankList">
         <li>排行榜</li>
       </router-link>
-    	<router-link to="/singers">
+		<router-link to="/singers">
         <li>歌手</li>
       </router-link>
     	<router-link to="/songsheet">
-        <li class="new">歌单</li>
+        <li>歌单</li>
       </router-link>
     	<router-link to="/mv">
-        <li>MV</li>
+        <li class="new">MV</li>
       </router-link>
     </ul>
+    <br>
+    <ul id="new2">
+    	<li v-loading.fullscreen.lock="fullscreenLoading" @click="getHotMV" class="new">推荐</li>
+    	<li @click="getMv('内地')">内地</li>
+      <li @click="getMv('港台')">港台</li>
+    	<li @click="getMv('日本')">日本</li>
+    	<li @click="getMv('韩国')">韩国</li>
+      <li @click="getMv('欧美')">欧美</li>
+    </ul>
     <br><br>
-    <div class="title">
-      <strong>精品歌单</strong>
-      <span @click="getgdList('new')" class="new">最新</span>
-      <span @click="getgdList('hot')">最热</span>
-    </div>
     <div class="mv">
       <ul>
         <li v-for="(i, index) in newMVList" :key="index">
           <div class="img-p">
-            <div @click="moreInfo(i.id)" :style="'background: url('+i.coverImgUrl+');'" class="img">
+            <div v-if="i.picUrl != undefined" @click="playMV(i.id)" :style="'background: url('+i.picUrl+');'" class="img">
               <div class="mask">
-                <img src="../assets/播放.png" alt="">
+                <img src="../../assets/播放.png" alt="">
+              </div>
+            </div>
+            <div v-else @click="playMV(i.id)" :style="'background: url('+i.cover+');'" class="img">
+              <div class="mask">
+                <img src="../../assets/播放.png" alt="">
               </div>
             </div>
           </div>
           <p>{{i.name}}</p>
-          <!-- <p>{{i.artistName}}</p> -->
+          <p>{{i.artistName}}</p>
         </li>
       </ul>
        <div class="block">
@@ -63,7 +72,7 @@
         pagesize: 30,
         total: 0,
         newMVList: [],
-        fullscreenLoading:true
+        fullscreenLoading:false
       }
     },
     methods: {
@@ -84,36 +93,83 @@
         this.currentPage = val;
         window.scrollTo(0, 0);
       },
-      getgdList(str) {
+      getMVList() {
         let that = this;
         this.fullscreenLoading = true;
         this.MVList = [];
         this.newMVList = [];
-        this.axios.get('/top/playlist?limit=100&order='+str).then(res => {
-          that.MVList = res.playlists;
-          this.total = res.playlists.length;
-          if(res.playlists.length > 30) {
+        this.axios.get('/personalized?limit=100').then(res => {
+          that.MVList = res.result;
+          this.total = res.result.length;
+          if(res.result.length > 30) {
             for(let i = 0; i < 30; i++) {
-              this.newMVList.push(res.playlists[i])
+              this.newMVList.push(res.result[i])
             }
           }
           else {
-            this.newMVList = res.playlists
+            this.newMVList = res.result
           }
           setTimeout(() => {
             this.fullscreenLoading = false;
           }, 900)
         })
+      },
+      // MV分类
+      getMv(name) {
         this.currentPage = 1;
+        //console.log(this.currentPage);
+        let that = this;
+        this.fullscreenLoading = true;
+        this.MVList = [];
+        this.newMVList = [];
+        this.axios.get('/top/mv?area='+name+'&limit=100').then(res => {
+          that.MVList = res.data;
+          this.total = res.data.length;
+          if(res.data.length > 30) {
+            for(let i = 0; i < 30; i++) {
+              this.newMVList.push(res.data[i])
+            }
+          }
+          else {
+            this.newMVList = res.data
+          }
+          setTimeout(() => {
+            this.fullscreenLoading = false;
+          }, 900)
+        })
       },
-     moreInfo(id) {
-        location.href = '#/songsheet/'+id;
+      playMV(id) {
+        this.playMusic(0);
+        location.href = '#/mv/'+id;
       },
+      getHotMV() {
+        let that = this;
+        this.fullscreenLoading = true;
+        this.MVList = [];
+        this.newMVList = [];
+        this.axios.get('/mv/first?limit=100').then(res => {
+          that.MVList = res.data;
+          this.total = res.data.length;
+          if(res.data.length > 30) {
+            for(let i = 0; i < 30; i++) {
+              this.newMVList.push(res.data[i])
+            }
+            //console.log(this.newMVList)
+          }
+          else {
+            this.newMVList = res.data
+          }
+        })
+        this.currentPage = 1;
+        setTimeout(() => {
+          this.fullscreenLoading = false;
+        }, 900)
+      }
     },
     mounted() {
       let that = this;
-      this.getgdList('new');
-      this.$(".title span").click(function(){
+      this.getHotMV();
+      this.$("#new2 li").click(function(){
       	that.$(this).addClass('new').siblings().removeClass('new');
       });
     }
@@ -134,25 +190,31 @@
   	float: left;
   	cursor: pointer;
   }
-  .new {
+  #new1 .new {
   	font-weight: 600;
   	box-shadow:0px 2px 3px #F0E423;
   }
-  .title {
+  #new2 {
+    font-size: 15px;
+    color: #333;
     margin-top: 20px;
-    margin-bottom: 33px;
+    margin-bottom: 20px;
+    text-align: center;
   }
-  .title strong{
-    font-size: 25px;
-    display: inline-block;
-    margin-right: 20px;
+  #new2 li {
+  	list-style: none;
+  	margin-left: 0px;
+  	float: left;
+  	cursor: pointer;
+    width: 63px;
+    height: 28px;
   }
-  .title span {
-    display: inline-block;
-    margin-right: 20px;
-  }
-  .title span:hover {
-    cursor: pointer;
+  #new2 .new {
+  	font-weight: 600;
+  	background: #F0E423;
+    line-height: 28px;
+    border-radius: 14px;
+    transform: translateY(-2.5px);
   }
   .mv ul {
     display: flex;
@@ -162,7 +224,7 @@
   .mv ul li {
     list-style: none;
     width: 20%;
-    margin-bottom: 20px;
+    margin-bottom: 23px;
   }
   .mv ul li p:nth-child(2) {
     font-size: 18px;
@@ -176,7 +238,7 @@
   }
   .mv ul li p:nth-child(3) {
     color: #666666;
-    font-size: 15px;
+    font-size: 14px;
     margin-top: 5px;
   }
   .mv ul li p:nth-child(2):hover {

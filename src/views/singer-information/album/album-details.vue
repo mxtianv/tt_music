@@ -1,6 +1,6 @@
 <template>
   <div v-if="code == 404" class="err">
-    <img src="../assets/err.png" alt="">
+    <img src="../../../assets/err.png" alt="">
     <p>抱歉，暂无相关数据，重新刷新页面试试吧</p>
     <router-link to="/">
       <div class="fhindex">
@@ -38,7 +38,7 @@
             label="歌曲">
             <template slot-scope="scope">
               <span @click="getMusicUrl(scope.row.id, [scope.row.al.name, scope.row.ar[0].name])" class="music_name">{{scope.row.name}}</span>
-              <img @click="getMusicMV(scope.row.mv)" class="music_name" v-if="scope.row.mv != 0" src="../assets/MV.png" alt="">
+              <img @click="getMusicMV(scope.row.mv)" class="music_name" v-if="scope.row.mv != 0" src="../../../assets/MV.png" alt="">
             </template>
           </el-table-column>
           <el-table-column

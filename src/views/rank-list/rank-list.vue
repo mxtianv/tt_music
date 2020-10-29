@@ -56,7 +56,7 @@
               label="歌曲">
               <template slot-scope="scope">
                 <span @click="getMusicUrl(scope.row.id, [scope.row.name, scope.row.ar[0].name])" class="music_name">{{scope.row.name}}</span>
-                <img @click="getMusicMV(scope.row.mv)" class="music_name" v-if="scope.row.mv != 0" src="../assets/MV.png" alt="">
+                <img @click="getMusicMV(scope.row.mv)" class="music_name" v-if="scope.row.mv != 0" src="../../assets/MV.png" alt="">
               </template>
             </el-table-column>
             <el-table-column
