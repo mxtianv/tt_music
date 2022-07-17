@@ -95,7 +95,7 @@
       },
       getMusicMV(id) {
         this.playMusic(0);
-        location.href = '#/mv/'+id;
+				this.$router.push(`/mv/${id}`)
       },
       handleSizeChange(val) {
         //console.log(`每页 ${val} 条`);
@@ -105,7 +105,7 @@
         window.scrollTo(0, 0);
       },
       getSinger(id) {
-        location.href = '#/singerdetails/'+id;
+				this.$router.push(`/singerdetails/${id}`)
       },
     },
     computed: {

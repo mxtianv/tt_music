@@ -97,7 +97,7 @@
       },
       getMusicMV(id) {
         this.playMusic(0);
-        location.href = '#/mv/'+id;
+        this.$router.push(`/mv/${id}`)
       },
       handleSizeChange(val) {
         //console.log(`每页 ${val} 条`);

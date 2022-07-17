@@ -1,22 +1,24 @@
 <template>
   <div class="singers" v-loading.fullscreen.lock="fullscreenLoading">
-    <ul id="new1">
-    	<router-link to="/">
-        <li>推荐</li>
-      </router-link>
-    	<router-link to="/rankList">
-        <li>排行榜</li>
-      </router-link>
-    	<router-link to="/singers">
-        <li class="new">歌手</li>
-      </router-link>
-    	<router-link to="/songsheet">
-        <li>歌单</li>
-      </router-link>
-    	<router-link to="/mv">
-        <li>MV</li>
-      </router-link>
-    </ul>
+    <div class="center">
+      <ul id="new1">
+      	<router-link to="/">
+          <li>推荐</li>
+        </router-link>
+      	<router-link to="/rankList">
+          <li>排行榜</li>
+        </router-link>
+      	<router-link to="/singers">
+          <li class="new">歌手</li>
+        </router-link>
+      	<router-link to="/songsheet">
+          <li>歌单</li>
+        </router-link>
+      	<router-link to="/mv">
+          <li>MV</li>
+        </router-link>
+      </ul>
+    </div>
     <br>
     <div class="peopleImg center">
     	<div class="content" v-for="(i, index) in singerImg" :key="index">
@@ -53,7 +55,7 @@
         this.fullscreenLoading = true;
         setTimeout(() => {
           this.fullscreenLoading = false;
-          location.href = '#/singerdetails/'+id;
+					this.$router.push(`/singerdetails/${id}`)
         }, 0)
       },
       getSingers() {

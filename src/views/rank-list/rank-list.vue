@@ -1,22 +1,24 @@
 <template>
   <div class="rank-list" v-loading.fullscreen.lock="fullscreenLoading">
-    <ul id="new1">
-    	<router-link to="/">
-        <li>推荐</li>
-      </router-link>
-    	<router-link to="/rankList">
-        <li  class="new">排行榜</li>
-      </router-link>
-    	<router-link to="/singers">
-        <li>歌手</li>
-      </router-link>
-    	<router-link to="/songsheet">
-        <li>歌单</li>
-      </router-link>
-    	<router-link to="/mv">
-        <li>MV</li>
-      </router-link>
-    </ul>
+    <div class="center">
+      <ul id="new1">
+      	<router-link to="/">
+          <li>推荐</li>
+        </router-link>
+      	<router-link to="/rankList">
+          <li  class="new">排行榜</li>
+        </router-link>
+      	<router-link to="/singers">
+          <li>歌手</li>
+        </router-link>
+      	<router-link to="/songsheet">
+          <li>歌单</li>
+        </router-link>
+      	<router-link to="/mv">
+          <li>MV</li>
+        </router-link>
+      </ul>
+    </div>
     <br>
     <div class="song-sheet center">
       <div class="left">
@@ -107,33 +109,33 @@
         fullscreenLoading: true,
         tabConList: [
           {
-            'id': 0,
+            'id': 318112231,
             'img': 'http://p2.music.126.net/N2HO5xfYEqyQ8q6oxCw8IQ==/18713687906568048.jpg',
             'title': '云音乐新歌榜',
             'time': '今日更新'
           },
           {
-            'id': 1,
+            'id': 19820015,
             'img': 'http://p1.music.126.net/GhhuF6Ep5Tq9IEvLsyCN7w==/18708190348409091.jpg',
             'title': '云音乐热歌榜',
             'time': '今日更新'
           },
           {
-            'id': 2,
+            'id': 2929230550,
             'img': 'http://p1.music.126.net/sBzD11nforcuh1jdLSgX7g==/18740076185638788.jpg',
-            'title': '网易原创歌曲榜',
+            'title': '原创歌曲榜',
             'time': '今日更新'
           },
           {
-            'id': 3,
+            'id': 2238665869,
             'img': 'http://p2.music.126.net/DrRIg6CrgDfVLEph9SNh7w==/18696095720518497.jpg',
             'title': '云音乐飙升榜',
             'time': '今日更新'
           },
           {
-            'id': 26,
-            'img': 'http://p2.music.126.net/oUxnXXvM33OUHxxukYnUjQ==/109951164174523461.jpg',
-            'title': '抖音排行榜',
+            'id': 114846926,
+            'img': 'http://p2.music.126.net/DrRIg6CrgDfVLEph9SNh7w==/18696095720518497.jpg',
+            'title': '音乐排行榜',
             'time': '今日更新'
           }
         ]
@@ -160,7 +162,7 @@
       },
       getMusicList(id) {
         this.fullscreenLoading = true;
-        this.axios.get('/top/list?idx='+id).then(res => {
+        this.axios.get('/playlist/detail?id='+id).then(res => {
           this.musicList = res.playlist;
           this.title = res.playlist.name;
           this.total = res.playlist.tracks.length;
@@ -177,7 +179,7 @@
 
     },
     mounted() {
-      this.getMusicList(0);
+      this.getMusicList(318112231);
       window.scrollTo(0, 0);
       //console.log(this.$route.query.id)
     }

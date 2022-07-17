@@ -1,27 +1,29 @@
 <template>
   <div class="playlists center" v-loading.fullscreen.lock="fullscreenLoading">
-    <ul id="new1">
-    	<router-link to="/">
-        <li>推荐</li>
-      </router-link>
-    	<router-link to="/rankList">
-        <li>排行榜</li>
-      </router-link>
-    	<router-link to="/singers">
-        <li>歌手</li>
-      </router-link>
-    	<router-link to="/songsheet">
-        <li class="new">歌单</li>
-      </router-link>
-    	<router-link to="/mv">
-        <li>MV</li>
-      </router-link>
-    </ul>
+    <div class="center">
+      <ul id="new1">
+      	<router-link to="/">
+          <li>推荐</li>
+        </router-link>
+      	<router-link to="/rankList">
+          <li>排行榜</li>
+        </router-link>
+      	<router-link to="/singers">
+          <li>歌手</li>
+        </router-link>
+      	<router-link to="/songsheet">
+          <li class="new">歌单</li>
+        </router-link>
+      	<router-link to="/mv">
+          <li>MV</li>
+        </router-link>
+      </ul>
+    </div>
     <br><br>
     <div class="title">
       <strong>精品歌单</strong>
       <span @click="getgdList('new')" class="new">最新</span>
-      <span @click="getgdList('hot')">最热</span>
+      <!-- <span @click="getgdList('hot')">最热</span> -->
     </div>
     <div class="mv">
       <ul>
@@ -72,16 +74,12 @@
         //console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        this.newMVList = [];
-        for(let i = (val-1)*30; i < 30*val; i++) {
-          if (this.MVList[i] != undefined) {
-            this.newMVList.push(this.MVList[i])
-          }
-          else {
-            break;
-          }
-        }
+        this.fullscreenLoading = true;
         this.currentPage = val;
+        this.axios.get(`/top/playlist?offset=${val}&limit=30`).then(res => {
+          this.newMVList = res.playlists;
+          this.fullscreenLoading = false;
+        })
         window.scrollTo(0, 0);
       },
       getgdList(str) {
@@ -89,25 +87,16 @@
         this.fullscreenLoading = true;
         this.MVList = [];
         this.newMVList = [];
-        this.axios.get('/top/playlist?limit=100&order='+str).then(res => {
-          that.MVList = res.playlists;
-          this.total = res.playlists.length;
-          if(res.playlists.length > 30) {
-            for(let i = 0; i < 30; i++) {
-              this.newMVList.push(res.playlists[i])
-            }
-          }
-          else {
-            this.newMVList = res.playlists
-          }
-          setTimeout(() => {
-            this.fullscreenLoading = false;
-          }, 900)
+        this.axios.get('/top/playlist?offset=1&limit=30').then(res => {
+          that.newMVList = res.playlists;
+          this.total = res.total;
+          this.fullscreenLoading = false;
         })
         this.currentPage = 1;
       },
      moreInfo(id) {
-        location.href = '#/songsheet/'+id;
+        this.$router.push(`/songsheet/${id}`)
+
       },
     },
     mounted() {

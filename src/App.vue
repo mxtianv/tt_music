@@ -23,8 +23,6 @@
     text-decoration: none;
   }
   #app {
-    max-width: 1650px;
-    min-width: 1200px;
     margin: 0 auto;
   }
   a:hover{
@@ -32,6 +30,8 @@
   }
   .center {
   	width: 85%;
+    max-width: 1650px;
+    min-width: 1200px;
   	margin: auto;
   }
   .cell .music_name:hover {
@@ -62,7 +62,7 @@
     color: #333;
   }
   #new1 {
-  	margin-left: 15%;
+  	margin-left: 13%;
     margin-top: 20px;
     margin-bottom: 20px;
     font-size: 15px;

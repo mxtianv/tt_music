@@ -11,7 +11,7 @@
     </div>
     <div class="header">
       <div class="center">
-        <a href="#/"><img src="../../assets/ttyy.png"></a>
+				<router-link to="/"><img src="../../assets/ttyy.png"></router-link>
       	<ul>
       		<router-link to="/">
             <li id="find">发现音乐</li>
@@ -276,8 +276,8 @@
       try {
       var urlhash = window.location.hash;
       if (!urlhash.match("fromapp")) {
-      if ((navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i))) {
-      window.location = "http://mxtian.cn:83/";
+      if ((navigator.userAgent.match(/(iPhone|Android|ios)/i))) {
+      window.location = "http://m.music.mxtian.cn/";
       }
       }
       } catch (err) {}

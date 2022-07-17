@@ -1,22 +1,24 @@
 <template>
   <div class="hotmv center">
-    <ul id="new1">
-    	<router-link to="/">
-        <li>推荐</li>
-      </router-link>
-    	<router-link to="/rankList">
-        <li>排行榜</li>
-      </router-link>
-		<router-link to="/singers">
-        <li>歌手</li>
-      </router-link>
-    	<router-link to="/songsheet">
-        <li>歌单</li>
-      </router-link>
-    	<router-link to="/mv">
-        <li class="new">MV</li>
-      </router-link>
-    </ul>
+    <div class="center">
+      <ul id="new1">
+      	<router-link to="/">
+          <li>推荐</li>
+        </router-link>
+      	<router-link to="/rankList">
+          <li>排行榜</li>
+        </router-link>
+      <router-link to="/singers">
+          <li>歌手</li>
+        </router-link>
+      	<router-link to="/songsheet">
+          <li>歌单</li>
+        </router-link>
+      	<router-link to="/mv">
+          <li class="new">MV</li>
+        </router-link>
+      </ul>
+    </div>
     <br>
     <ul id="new2">
     	<li v-loading.fullscreen.lock="fullscreenLoading" @click="getHotMV" class="new">推荐</li>
@@ -140,7 +142,7 @@
       },
       playMV(id) {
         this.playMusic(0);
-        location.href = '#/mv/'+id;
+        this.$router.push(`/mv/${id}`)
       },
       getHotMV() {
         let that = this;

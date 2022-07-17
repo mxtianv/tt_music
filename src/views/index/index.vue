@@ -31,7 +31,7 @@
     		<a :class="{new: gedanIndex == 2}" @click="getNewSongSheetImg('古风', 2)" href="javascript:;">古风</a>
     		<a :class="{new: gedanIndex == 3}" @click="getNewSongSheetImg('欧美', 3)" href="javascript:;">欧美</a>
     		<a :class="{new: gedanIndex == 4}" @click="getNewSongSheetImg('流行', 4)" href="javascript:;">流行</a>
-    		<a href="#/songsheet">更多</a>
+        <router-link to="/songsheet">更多</router-link>
     	</div>
     	<br><br>
     	<div class="Item">
@@ -71,12 +71,14 @@
           </div>
           <ul>
             <li v-for="j in 5" :key="j">
-              <span class="p_id">{{j}}</span>
-              <div class="title">
-                <div class="music_name">
-                  <span @click="getMusicUrl(i.tracks[j].id, i.tracks[j].name, i.tracks[j].ar[0].name)">{{i.tracks[j].name}}</span>
+              <div v-if="i.tracks[j]">
+                <span class="p_id">{{j}}</span>
+                <div class="title">
+                  <div class="music_name">
+                    <span @click="getMusicUrl(i.tracks[j].id, i.tracks[j].name, i.tracks[j].ar[0].name)">{{i.tracks[j].name}}</span>
+                  </div>
+                  <p>{{i.tracks[j].ar[0].name}}</p>
                 </div>
-                <p>{{i.tracks[j].ar[0].name}}</p>
               </div>
             </li>
           </ul>
@@ -153,7 +155,7 @@
       // 获取歌单封面
       getSongSheetImg() {
         let that = this;
-        this.axios.get("/top/playlist?limit=5&order=new").then(res => {
+        this.axios.get("/top/playlist?limit=5").then(res => {
           that.img = res.playlists;
         })
         this.gedanIndex = 0;
@@ -161,7 +163,7 @@
       getNewSongSheetImg(name, index) {
         let that = this;
         that.fullscreenLoading = true;
-        this.axios.get("/top/playlist?limit=5&order=new&cat="+name).then(res => {
+        this.axios.get("/top/playlist?limit=5&cat="+name).then(res => {
           that.img = res.playlists;
           that.fullscreenLoading = false;
         }, err => {
@@ -171,11 +173,7 @@
       },
       // 获取歌单详细
       getrecommendSongs(id) {
-        this.fullscreenLoading = true;
-        setTimeout(() => {
-          this.fullscreenLoading = false;
-          location.href = '#/songsheet/'+id
-        }, 0)
+        this.$router.push(`/songsheet/${id}`)
       },
       // 获取 Banner
       getBanner() {
@@ -186,11 +184,11 @@
       },
       // 获取音乐排行榜
       async getBang() {
-        let music1 = await this.axios.get('/top/list?idx=1')
-        let music2 = await this.axios.get('/top/list?idx=0')
-        let music3 = await this.axios.get('/top/list?idx=3')
-        let music4 = await this.axios.get('/top/list?idx=14')
-        let music5 = await this.axios.get('/top/list?idx=26')
+        let music1 = await this.axios.get('/playlist/detail?id=318112231')
+        let music2 = await this.axios.get('/playlist/detail?id=19820015')
+        let music3 = await this.axios.get('/playlist/detail?id=2929230550')
+        let music4 = await this.axios.get('/playlist/detail?id=2238665869')
+        let music5 = await this.axios.get('/playlist/detail?id=114846926')
         return [music1.playlist,
                 music2.playlist,
                 music3.playlist,
@@ -366,6 +364,7 @@
   	display: -webkit-flex; /* Safari */
   	display: flex;
   	justify-content: space-between;
+    min-height: 500px;
   }
   .Bang .title span,
   .Bang .title p {
@@ -463,7 +462,7 @@
   	display: inline-block;
   	margin-left: 20px;
   	padding: 18px;
-  	
+
   	background: #ffdf1f;
   	border-radius: 20px;
   	line-height: 0px;

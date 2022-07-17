@@ -79,11 +79,11 @@
         this.playMusicInfo(name);
       },
       getSinger(id) {
-        location.href = '#/singerdetails/' + id;
+        this.$router.push(`/singerdetails/${id}`)
       },
       getMusicMV(id) {
         this.playMusic(0);
-        location.href = '#/mv/' + id
+        this.$router.push(`/mv/${id}`)
       },
       getMusicList(keyword) {
         this.axios.get('/search?limit=30&keywords=' + keyword).then(res => {
@@ -98,7 +98,7 @@
         })
       },
       getAlbum(id) {
-        location.href = '#/albumdetails/'+id
+        this.$router.push(`/albumdetails/${id}`)
       },
       handleCurrentChange(val) {
         this.getNewMusicList(val);

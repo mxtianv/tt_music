@@ -9,23 +9,25 @@
     </router-link>
   </div>
   <div v-else class="singer-details" v-loading.fullscreen.lock="fullscreenLoading">
-    <ul id="new1">
-    	<router-link to="/">
-        <li>推荐</li>
-      </router-link>
-    	<router-link to="/rankList">
-        <li>排行榜</li>
-      </router-link>
-    	<router-link to="/singers">
-        <li class="new">歌手</li>
-      </router-link>
-    	<router-link to="/songsheet">
-        <li>歌单</li>
-      </router-link>
-    	<router-link to="/mv">
-        <li>MV</li>
-      </router-link>
-    </ul>
+    <div class="center">
+			<ul id="new1">
+				<router-link to="/">
+			    <li>推荐</li>
+			  </router-link>
+				<router-link to="/rankList">
+			    <li>排行榜</li>
+			  </router-link>
+				<router-link to="/singers">
+			    <li class="new">歌手</li>
+			  </router-link>
+				<router-link to="/songsheet">
+			    <li>歌单</li>
+			  </router-link>
+				<router-link to="/mv">
+			    <li>MV</li>
+			  </router-link>
+			</ul>
+		</div>
     <br>
     <div class="singer">
       <div class="introduction center">
@@ -107,7 +109,7 @@
       },
       getMusicMV(id) {
         this.playMusic(0);
-        location.href = '#/mv/'+id;
+        this.$router.push(`/mv/${id}`)
       },
       handleSizeChange(val) {
         //console.log(`每页 ${val} 条`);
